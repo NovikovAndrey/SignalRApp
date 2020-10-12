@@ -1,36 +1,26 @@
 <router-outlet></router-outlet>
+<app-main></app-main>
 <div class="ud-header">
   <h2 class="text-center">CheckUsers</h2>
 </div>
-<div class="ud-body">
-  <input type="text" placeholder="Your name" class="name-box" [(ngModel)]="userDto.name" />
-  <button class="send-btn" (click)= "send(userDto.name)">{{button}}</button>
+<div>
+</div>
+<!-- <div class="ud-body">
+  <input type="text" placeholder="Your name" class="name-box" [(ngModel)]="userName" />
+  <button class="send-btn" (click)= "send(userName)">{{button}}</button>
 
   <div *ngIf="isAdmin; else userBlock">
-    <table mat-table [dataSource]="activeUsers" class="mat-elevation-z8" [hidden]="activeUsers.data.length==0">
+      <div>
 
 
-        <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let activeUser">{{activeUser.name}}</td>
-        </ng-container>
-
-
-        <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef>Status</th>
-        <td mat-cell *matCellDef="let activeUser"> {{activeUser.status}} </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="columns"></tr>
-        <tr mat-row *matRowDef="let row; columns: columns;"></tr>
-    </table>
-    <div class="msg-box" >
-      <ul>
-        <li *ngFor="let mObj of adminMessagesList">Message :<br />
-          <span class="msg-italic-style">{{mObj.name}}</span>
-        </li>
-      </ul>
-    </div>
+      </div>
+      <div class="msg-box" >
+        <ul>
+            <li *ngFor="let mObj of adminMessagesList">Message :<br />
+              <span class="msg-italic-style">{{mObj.name}}</span>
+            </li>
+        </ul>
+      </div>
 </div>
     <ng-template #userBlock>
       <div class="msg-box" >
@@ -41,4 +31,4 @@
         </ul>
       </div>
     </ng-template>
-</div>
+</div> -->

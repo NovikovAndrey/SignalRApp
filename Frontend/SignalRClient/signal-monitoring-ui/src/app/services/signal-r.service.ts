@@ -11,9 +11,6 @@ import { ConfigModel } from '../models/config-mogel';
   providedIn: 'root'
 })
 export class SignalRService {
-
-  // private connection: signalR.HubConnection = new signalR.HubConnectionBuilder().withUrl("https://localhost:44398/chat").build();
-  // readonly POST_URL: string  = "https://localhost:44398/api/chat/sendUser";
   private connection: signalR.HubConnection;
   readonly POST_URL: string  = "https://localhost:44389/api/users/sendUser";
 
@@ -44,18 +41,6 @@ export class SignalRService {
     {
       this.connection.onclose(async (flag)=> {if (flag){await this.startConnection(user);}});
     }
-    // this.connectionConfig(user, this.adminConfig, this.userConfig);
-    // if(user=="Admin")
-    // {
-
-    //   this.connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:44389/admin").build();
-    //   this.connection.on("GetUsers", (mess) => this.mapMessageAdmin(mess));
-    // }
-    // else
-    // {
-    //   this.connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:44389users").build();
-    //   this.connection.on("GetMessages", (mess) => this.mapMessageUser(mess));
-    // }
     try{
       this.connection.start();
       console.log("connected");
@@ -76,13 +61,8 @@ export class SignalRService {
     userConfig.methodName = "GetMessages";
   };
 
-  // connectionConfig(user: string, adminConfig: ConfigModel, userConfig: ConfigModel) {
-  //   throw new Error('Method not implemented.');
-  // };
-
   private mapMessageAdmin(mess: AdminMessageModel): void {
-    this.adminMessagesObject.name = mess.name;
-    this.adminObj.next(this.adminMessagesObject);
+    this.adminObj.next(new AdminMessageModel(mess.name, mess.status));
  };
 
   public async stopConnection() {
@@ -106,10 +86,5 @@ export class SignalRService {
 
   public broadcastMessage(msgDto: AdminMessageModel) {
     this.http.post(this.POST_URL, msgDto).subscribe(data => console.log("fdgdsfgdfg"));
-    // this.connection.invoke("SendMessage1", msgDto.user, msgDto.msgText).catch(err => console.error(err));    // This can invoke the server method named as "SendMethod1" directly.
   };
-
-  removeFromActiveUsers(user: string) {
-    throw new Error('Method not implemented.');
-  }
 }
