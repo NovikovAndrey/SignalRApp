@@ -5,6 +5,7 @@ import { Observable, Subject } from 'rxjs';
 import { UserMessageModel } from '../models/user-message-model';
 import { AdminMessageModel } from '../models/admin-message-model';
 import { ConfigModel } from '../models/config-mogel';
+import { nextTick } from 'process';
 
 
 @Injectable({
@@ -95,8 +96,7 @@ export class SignalRService {
     this.http.post(this.POST_URL_SetTimeOut, sec).subscribe();
   };
 
-  getUserRole(user: any): boolean {
-    throw new Error('Method not implemented.');
+  getUserRole(user: AdminMessageModel) {
+    return this.http.post(this.POST_URL_GetUserRole, user);
   }
-
 }

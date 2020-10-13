@@ -6,6 +6,7 @@ import { AdminMessageModel } from '../models/admin-message-model';
 import { SignalRService } from '../services/signal-r.service';
 import { FormBuilder } from '@angular/forms';
 import { TimeOuts } from '../models/timeout-model';
+import { UserRoleModel } from '../models/user-role';
 
 @Component({
   selector: 'app-main',
@@ -30,8 +31,8 @@ export class MainComponent {
     setTimeOut: ['']
   })
 
-  async send(user: any){
-
+  async send(user: AdminMessageModel){
+    this.signalRService.getUserRole(user).subscribe((data)=> {this.checkUserRole(data);});
     if (user.status==0)
     {
       this.signalRService.broadcastMessage(new AdminMessageModel(user.name, user.status));
@@ -54,6 +55,16 @@ export class MainComponent {
       }
     }
   }
+  checkUserRole(user: any) {
+    if(user.role=="Admin")
+    {
+      this.isAdmin = true;
+    }
+    else
+    {
+      this.isAdmin = false;
+    }
+  }
 
   addToListUsersMessages(usermessage: UserMessageModel) {
     let tempMess = new UserMessageModel();
@@ -64,7 +75,6 @@ export class MainComponent {
   onSubmit()
   {
     this.signalRService.setTimeOutMessage(this.setTimeOutComboBox.value);
-    // this.setTimeOutComboBox.value
   }
 
   workWithListUsersNames(adminmessage: AdminMessageModel) {
