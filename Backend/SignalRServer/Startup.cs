@@ -46,7 +46,7 @@ namespace SignalRServer
             services.AddSignalR();
             //services.AddSingleton<SendMessageService>();
 
-            services.AddSendMessageService();
+            //services.AddSendMessageService();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

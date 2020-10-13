@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { UserMessageModel } from '../models/user-message-model';
 import { AdminMessageModel } from '../models/admin-message-model';
 import { SignalRService } from '../services/signal-r.service';
+import { emit } from 'process';
 
 @Component({
   selector: 'app-name',
@@ -25,6 +26,7 @@ export class NameComponent {
     {
       this.button = "Connect";
       this.isConnect=!this.isConnect;
+      // this.sendButton.emit({name:this.userName});
       this.sendButton.emit({name:this.userName, status:0});
     }
     else

@@ -11,9 +11,11 @@ import { ConfigModel } from '../models/config-mogel';
   providedIn: 'root'
 })
 export class SignalRService {
+
   private connection: signalR.HubConnection;
   readonly POST_URL_UserName: string  = "https://localhost:44389/api/users/sendUser";
   readonly POST_URL_SetTimeOut: string  = "https://localhost:44389/api/admin/setTimeOut";
+  readonly POST_URL_GetUserRole: string = "https://localhost:44389/api/work/getUserRole";
 
   private adminConfig: ConfigModel = new ConfigModel();
   private userConfig: ConfigModel = new ConfigModel();
@@ -91,6 +93,10 @@ export class SignalRService {
 
   public setTimeOutMessage(sec:number){
     this.http.post(this.POST_URL_SetTimeOut, sec).subscribe();
+  };
+
+  getUserRole(user: any): boolean {
+    throw new Error('Method not implemented.');
   }
 
 }

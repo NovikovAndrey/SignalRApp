@@ -9,9 +9,9 @@ namespace SignalRServer.Extension
 {
     public static class ServiceProviderExtensions
     {
-        public static void AddSendMessageService(this IServiceCollection services)
-        {
-            services.AddSingleton<SendMessageService>();
-        }
+        //public static void AddSendMessageService(this IServiceCollection services)
+        //{
+        //    services.AddSingleton<SendMessageService>();
+        //}
     }
 }

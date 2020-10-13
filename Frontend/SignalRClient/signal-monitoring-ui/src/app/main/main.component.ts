@@ -31,6 +31,7 @@ export class MainComponent {
   })
 
   async send(user: any){
+
     if (user.status==0)
     {
       this.signalRService.broadcastMessage(new AdminMessageModel(user.name, user.status));

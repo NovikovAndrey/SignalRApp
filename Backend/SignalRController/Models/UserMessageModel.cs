@@ -8,5 +8,6 @@ namespace SignalRController.Models
     public class UserMessageModel
     {
         public long rand { get; set; }
+
     }
 }
