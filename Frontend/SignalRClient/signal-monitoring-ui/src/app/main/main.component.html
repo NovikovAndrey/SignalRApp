@@ -9,27 +9,27 @@
   <app-name (sendButton)="send($event)"></app-name>
   <!-- <input type="text" placeholder="Your name" class="name-box" [(ngModel)]="userName" />
   <button class="send-btn" (click)= "send(userName)">{{button}}</button> -->
-
   <div *ngIf="isAdmin; else userBlock">
-      <div>
-
-
-      </div>
+    <form [formGroup]="setTimeOutComboBox" (ngSubmit)="onSubmit()" >
+      <select class="timeOut-select"  formControlName="setTimeOut">
+         <option value="" disabled>Set Timeout (sec.)</option>
+         <option *ngFor="let sec of timeOuts" [ngValue] = "sec.value">{{sec.name}}</option>
+      </select>
+      <button type="submit">Set timeout</button>
+    </form>
       <div class="msg-box" >
         <ul>
             <li *ngFor="let mObj of adminMessagesList">User {{mObj.name}} joined<br />
-              <!-- <span class="msg-italic-style">{{mObj.name}}</span> -->
             </li>
         </ul>
       </div>
-</div>
-    <ng-template #userBlock>
-      <div class="msg-box" >
-        <ul>
-            <li *ngFor="let mObj of userMessagesList">{{mObj.rand}}<br />
-              <!-- <span class="msg-italic-style">{{mObj.rand}}</span> -->
-            </li>
-        </ul>
-      </div>
-    </ng-template>
+  </div>
+  <ng-template #userBlock>
+    <div class="msg-box" >
+      <ul>
+          <li *ngFor="let mObj of userMessagesList">{{mObj.rand}}<br />
+          </li>
+      </ul>
+    </div>
+  </ng-template>
 </div>

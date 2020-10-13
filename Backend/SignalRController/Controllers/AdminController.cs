@@ -16,17 +16,19 @@ namespace SignalRController.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private readonly IHubContext<AdminHub> _hubContext;
+        private readonly WorkController _workController;
 
-        public AdminController(IHubContext<AdminHub> hubContext)
+        public AdminController(WorkController workController)
         {
-            _hubContext = hubContext;
+            _workController = workController;
         }
 
-        public IActionResult GetUsers(AdminMessagesModel userName)
+        [HttpPost]
+        [Route("setTimeOut")]
+        public void SetTimeOut([FromBody] TimeOutModel timeOutUserMesssage)
         {
-            _hubContext.Clients.All.SendAsync("GetUsers", new AdminMessagesModel(userName.Name, userName.Status));
-            return Ok();
+            _workController.SetTimeOutFromAdmin(timeOutUserMesssage.setTimeOut);
         }
+
     }
 }

@@ -12,7 +12,8 @@ import { ConfigModel } from '../models/config-mogel';
 })
 export class SignalRService {
   private connection: signalR.HubConnection;
-  readonly POST_URL: string  = "https://localhost:44389/api/users/sendUser";
+  readonly POST_URL_UserName: string  = "https://localhost:44389/api/users/sendUser";
+  readonly POST_URL_SetTimeOut: string  = "https://localhost:44389/api/admin/setTimeOut";
 
   private adminConfig: ConfigModel = new ConfigModel();
   private userConfig: ConfigModel = new ConfigModel();
@@ -85,6 +86,11 @@ export class SignalRService {
   };
 
   public broadcastMessage(msgDto: AdminMessageModel) {
-    this.http.post(this.POST_URL, msgDto).subscribe(data => console.log("fdgdsfgdfg"));
+    this.http.post(this.POST_URL_UserName, msgDto).subscribe();
   };
+
+  public setTimeOutMessage(sec:number){
+    this.http.post(this.POST_URL_SetTimeOut, sec).subscribe();
+  }
+
 }

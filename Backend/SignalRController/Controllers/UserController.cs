@@ -19,58 +19,18 @@ namespace SignalRController.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IHubContext<UserHub> _hubContext;
-        private readonly AdminController _adminController;
+        private readonly WorkController _workController;
 
-        public UserController(IHubContext<UserHub> hubContext, AdminController adminController)
+        public UserController(WorkController workController)
         {
-            _hubContext = hubContext;
-            _adminController = adminController;
-        }
-        // GET: api/<UserController>
-        [HttpGet]
-        public ActionResult Get()
-        {
-            _hubContext.Clients.All.SendAsync("GetMessage", "test", new Random().Next());
-            return Ok();
+            _workController = workController;
         }
 
-        // GET api/<UserController>/5
         [HttpPost]
         [Route("sendUser")]
-        public IActionResult SendAsync([FromBody] AdminMessagesModel userName)
+        public void SendAsync([FromBody] AdminMessagesModel userName)
         {
-            if (!string.IsNullOrEmpty(userName.Name))
-            {
-                if (userName.Name.Equals("Admin"))
-                {
-
-                }
-                else
-                {
-                    SendMessageAdmin(userName);
-                    SendMessageUsers();
-                }
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-
-        private IActionResult SendMessageUsers()
-        {
-            while (true)
-            {
-                _hubContext.Clients.All.SendAsync("GetMessages", new UserMessageModel { rand = new Random().Next() });
-                Thread.Sleep(5000);
-            }
-        }
-
-        private void SendMessageAdmin(AdminMessagesModel userName)
-        {
-            _adminController.GetUsers(userName);
+            _workController.SendMessage(userName);
         }
     }
 }
