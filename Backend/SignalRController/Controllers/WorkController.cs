@@ -18,8 +18,6 @@ namespace SignalRController.Controllers
     {
         private readonly IHubContext<UserHub> _hubUser;
         private readonly IHubContext<AdminHub> _hubAdmin;
-        private readonly UserController _userController;
-        private readonly AdminController _adminController;
         private static int timeOut = 5;
         private static bool isWorking = false;
 

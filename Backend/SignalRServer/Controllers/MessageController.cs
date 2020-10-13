@@ -18,7 +18,6 @@ namespace SignalRServer.Controllers
     public class MessageController : ControllerBase
     {
         private IHubContext<SendHub> _hubContext;
-        private string _adminGroup = "Admin", _userGroup = "Users";
              
         public MessageController(IHubContext<SendHub> hubContext)
         {
