@@ -29,9 +29,9 @@ export class SignalRService {
   constructor(private http: HttpClient) {
 
   }
-  public async startConnection(user: string) {
+  public async startConnection(user: any) {
     this.setConfigurations(this.adminConfig, this.userConfig);
-    if (user == "Admin")
+    if (user)
     {
       this.connection = new signalR.HubConnectionBuilder().withUrl(this.adminConfig.chanelUrl).build();
       this.connection.on(this.adminConfig.methodName, (mess) => this.mapMessageAdmin(mess));

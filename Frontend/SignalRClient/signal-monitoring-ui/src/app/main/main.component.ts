@@ -23,46 +23,45 @@ export class MainComponent {
   userName:string;
   timeOuts: TimeOuts[] = [{value:5, name:"5 sec."} , {value:10, name:"10 sec."}, {value:15, name:"15 sec."}, {value:20, name:"20 sec."}];
 
-  constructor(private signalRService: SignalRService, public fb: FormBuilder){
-
-  }
+  constructor(private signalRService: SignalRService, public fb: FormBuilder){ }
 
   setTimeOutComboBox = this.fb.group({
     setTimeOut: ['']
   })
 
   async send(user: AdminMessageModel){
-    this.signalRService.getUserRole(user).subscribe((data)=> {this.checkUserRole(data);});
-    if (user.status==0)
-    {
-      this.signalRService.broadcastMessage(new AdminMessageModel(user.name, user.status));
-      this.subscription.unsubscribe();
-      this.signalRService.stopConnection();
-    }
-    else
-    {
-      this.signalRService.startConnection(user.name);
-      this.signalRService.broadcastMessage(new AdminMessageModel(user.name, user.status));
-      if (user.name == "Admin")
-      {
-        this.subscription=this.signalRService.adminMessageReceived().subscribe((adminmessage) => { this.workWithListUsersNames(adminmessage); });
-        this.isAdmin = true;
-      }
-      else
-      {
-        this.subscription=this.signalRService.usersMessageReceived().subscribe((usermessage) => { this.addToListUsersMessages(usermessage); });
-        this.isAdmin = false;
-      }
-    }
+    this.signalRService.getUserRole(user).subscribe((data)=> {this.checkUserRole(data, user.status);});
   }
-  checkUserRole(user: any) {
-    if(user.role=="Admin")
+  checkUserRole(checkRole: any, status: number) {
+    if(checkRole.role=="Admin")
     {
       this.isAdmin = true;
     }
     else
     {
       this.isAdmin = false;
+    }
+    this.connections(checkRole, status)
+  }
+  connections(userCheckedRole: any, status: number) {
+    if (status==0)
+    {
+      this.signalRService.broadcastMessage(new AdminMessageModel(userCheckedRole.name, status));
+      this.subscription.unsubscribe();
+      this.signalRService.stopConnection();
+    }
+    else
+    {
+      this.signalRService.startConnection(this.isAdmin);
+      this.signalRService.broadcastMessage(new AdminMessageModel(userCheckedRole.name, status));
+      if (this.isAdmin)
+      {
+        this.subscription=this.signalRService.adminMessageReceived().subscribe((adminmessage) => { this.workWithListUsersNames(adminmessage); });
+      }
+      else
+      {
+        this.subscription=this.signalRService.usersMessageReceived().subscribe((usermessage) => { this.addToListUsersMessages(usermessage); });
+      }
     }
   }
 
