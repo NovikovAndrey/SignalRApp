@@ -7,8 +7,6 @@
 </div>
 <div class="ud-body">
   <app-name (sendButton)="send($event)"></app-name>
-  <!-- <input type="text" placeholder="Your name" class="name-box" [(ngModel)]="userName" />
-  <button class="send-btn" (click)= "send(userName)">{{button}}</button> -->
   <div *ngIf="isAdmin; else userBlock">
     <form [formGroup]="setTimeOutComboBox" (ngSubmit)="onSubmit()" >
       <select class="timeOut-select"  formControlName="setTimeOut">

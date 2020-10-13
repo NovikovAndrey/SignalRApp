@@ -20,10 +20,8 @@ namespace SignalRController.Controllers
         private readonly IHubContext<AdminHub> _hubAdmin;
         private readonly UserController _userController;
         private readonly AdminController _adminController;
-        private int timeOut = 5;
-        private bool Work = true;
+        private static int timeOut = 5;
         private static bool isWorking = false;
-
 
         public WorkController(IHubContext<UserHub> hubUser, IHubContext<AdminHub> hubAdmin)
         {
@@ -45,12 +43,11 @@ namespace SignalRController.Controllers
             {
                 return new JsonResult(new UserRoleModel(user.Name, "User"));
             }
-
         }
 
-        private IActionResult GetUsers(AdminMessagesModel userName)
+        private IActionResult GetUsers(MessageModel user)
         {
-            _hubAdmin.Clients.All.SendAsync("GetUsers", new AdminMessagesModel(userName.Name, userName.Status));
+            _hubAdmin.Clients.All.SendAsync("GetUsers", new { Name=user.Name, Status=user.Status });
             return Ok();
         }
 
@@ -58,10 +55,7 @@ namespace SignalRController.Controllers
         {
             if (isWorking)
                 return;
-
             isWorking = true;
-
-            var t = timeOut;
             while (true)
             {
                 _hubUser.Clients.All.SendAsync("GetMessages", new UserMessageModel { rand = new Random().Next() });
@@ -69,30 +63,26 @@ namespace SignalRController.Controllers
             }
         }
 
-        public void SendMessage(AdminMessagesModel userName)
+        public void SendMessage(MessageModel user)
         {
-            if (!string.IsNullOrEmpty(userName.Name))
+            if (!string.IsNullOrEmpty(user.Role))
             {
-                //if (!userName.Name.Equals("Admin"))
-                if(!(new[] {"Admin", "Admin1", "Admin2"}).Contains(userName.Name))
+                if(user.Role != "Admin")
                 {
-                    SendMessageAdmin(userName);
+                    SendMessageAdmin(user);
                     SendMessageUsers();
                 }
             }
         }
 
-        private void SendMessageAdmin(AdminMessagesModel userName)
+        private void SendMessageAdmin(MessageModel userName)
         {
             GetUsers(userName);
         }
 
         public void SetTimeOutFromAdmin(int sec)
         {
-            //Work = false;
             timeOut = sec;
-            //Work = true;
-
         }
 
     }

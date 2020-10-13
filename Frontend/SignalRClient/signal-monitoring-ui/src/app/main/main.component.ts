@@ -7,6 +7,7 @@ import { SignalRService } from '../services/signal-r.service';
 import { FormBuilder } from '@angular/forms';
 import { TimeOuts } from '../models/timeout-model';
 import { UserRoleModel } from '../models/user-role';
+import { MessageModel } from '../models/message';
 
 @Component({
   selector: 'app-main',
@@ -30,10 +31,16 @@ export class MainComponent {
   })
 
   async send(user: AdminMessageModel){
-    this.signalRService.getUserRole(user).subscribe((data)=> {this.checkUserRole(data, user.status);});
+    this.signalRService.getUserRole(user).subscribe((data)=> {this.parseMesageModel(data, user.status);});
   }
-  checkUserRole(checkRole: any, status: number) {
-    if(checkRole.role=="Admin")
+
+  parseMesageModel(checkRole: any, status: number)
+  {
+    this.checkUserRole(new MessageModel(checkRole.name, status, checkRole.role))
+  }
+
+  checkUserRole(user: MessageModel) {
+    if(user.role=="Admin")
     {
       this.isAdmin = true;
     }
@@ -41,19 +48,19 @@ export class MainComponent {
     {
       this.isAdmin = false;
     }
-    this.connections(checkRole, status)
+    this.connections(user)
   }
-  connections(userCheckedRole: any, status: number) {
-    if (status==0)
+  connections(user: MessageModel) {
+    if (user.status==0)
     {
-      this.signalRService.broadcastMessage(new AdminMessageModel(userCheckedRole.name, status));
+      this.signalRService.broadcastMessage(user);
       this.subscription.unsubscribe();
       this.signalRService.stopConnection();
     }
     else
     {
       this.signalRService.startConnection(this.isAdmin);
-      this.signalRService.broadcastMessage(new AdminMessageModel(userCheckedRole.name, status));
+      this.signalRService.broadcastMessage(user);
       if (this.isAdmin)
       {
         this.subscription=this.signalRService.adminMessageReceived().subscribe((adminmessage) => { this.workWithListUsersNames(adminmessage); });

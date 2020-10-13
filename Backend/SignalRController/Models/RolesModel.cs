@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace SignalRController.Models
 {
-    public class UserMessageModel
+    public class RolesModel
     {
-        public long rand { get; set; }
+        public string Role { get; set; }
     }
 }

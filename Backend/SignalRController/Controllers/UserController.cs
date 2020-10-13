@@ -28,9 +28,9 @@ namespace SignalRController.Controllers
 
         [HttpPost]
         [Route("sendUser")]
-        public void SendAsync([FromBody] AdminMessagesModel userName)
+        public void SendAsync([FromBody] MessageModel user)
         {
-            _workController.SendMessage(userName);
+            _workController.SendMessage(user);
         }
     }
 }

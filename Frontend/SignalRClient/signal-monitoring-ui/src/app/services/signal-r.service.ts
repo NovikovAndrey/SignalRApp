@@ -6,6 +6,7 @@ import { UserMessageModel } from '../models/user-message-model';
 import { AdminMessageModel } from '../models/admin-message-model';
 import { ConfigModel } from '../models/config-mogel';
 import { nextTick } from 'process';
+import { MessageModel } from '../models/message';
 
 
 @Injectable({
@@ -88,7 +89,7 @@ export class SignalRService {
     return this.adminObj.asObservable();
   };
 
-  public broadcastMessage(msgDto: AdminMessageModel) {
+  public broadcastMessage(msgDto: MessageModel) {
     this.http.post(this.POST_URL_UserName, msgDto).subscribe();
   };
 
