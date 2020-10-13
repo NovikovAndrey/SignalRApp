@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -18,15 +20,17 @@ namespace SignalRController.Controllers
     {
         private readonly IHubContext<UserHub> _hubUser;
         private readonly IHubContext<AdminHub> _hubAdmin;
+        private readonly IHubContext<ImagesHub> _hubImages;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private static int timeOut = 5;
         private static bool isWorking = false;
 
-        public WorkController(IHubContext<UserHub> hubUser, IHubContext<AdminHub> hubAdmin)
+        public WorkController(IHubContext<UserHub> hubUser, IHubContext<AdminHub> hubAdmin, IHubContext<ImagesHub> hubImages, IWebHostEnvironment webHostEnvironment)
         {
             _hubUser = hubUser;
             _hubAdmin = hubAdmin;
-            //_userController = userController;
-            //_adminController = adminController;
+            _hubImages = hubImages;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpPost]
@@ -70,6 +74,18 @@ namespace SignalRController.Controllers
                     SendMessageAdmin(user);
                     SendMessageUsers();
                 }
+                SendImages();
+            }
+        }
+
+        private void SendImages()
+        {
+            while (true)
+            {
+                var tt = _webHostEnvironment.ContentRootPath;
+                var t = Path.Combine(tt,"Images", $"{ new Random().Next(1, 10).ToString()}.png");
+                _hubImages.Clients.All.SendAsync("SendImages", new UserMessageModel { rand = new Random().Next() });
+                Thread.Sleep(timeOut * 1000);
             }
         }
 

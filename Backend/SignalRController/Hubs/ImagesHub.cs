@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace SignalRController.Hubs
 {
-    public class AdminHub: Hub
+    public class ImagesHub: Hub
     {
-        public Task SendUsers(string t)
+        public Task SendImages()
         {
-            return Clients.All.SendAsync("SendUsers", t);
+            return Clients.All.SendAsync("SendImages");
         }
     }
 }
