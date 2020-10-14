@@ -29,6 +29,10 @@ export class MainComponent {
   userStatus: string = "active";
   timeOuts: TimeOuts[] = [{value:5, name:"5 sec."} , {value:10, name:"10 sec."}, {value:15, name:"15 sec."}, {value:20, name:"20 sec."}];
   blob: string;
+  buttonConnect = "Connect";
+  isConnect = false;
+  isConnectedParent = false;
+  isConnected = false;
 
   constructor(private signalRService: SignalRService, public fb: FormBuilder){ }
 
@@ -78,12 +82,23 @@ export class MainComponent {
       }
       this.subscription = this.signalRService.blobMessageReceived().subscribe((blob)=> {this.workWithBlob(blob)});
     }
+     this.checkConnect(this.signalRService.isConnect);
+  };
+
+  checkConnect(isConnect: boolean) {
+    if(isConnect){
+      this.buttonConnect = "Disconnect";
+    }
+    else{
+      this.buttonConnect = "Connect";
+    }
+    this.isConnect = isConnect;
   };
 
   workWithBlob(blob: BlobModel) {
     this.isBlob=true;
     this.blob = blob.type+blob.blob;
-  }
+  };
 
   addToListUsersMessages(usermessage: UserMessageModel) {
     let tempMess = new UserMessageModel();

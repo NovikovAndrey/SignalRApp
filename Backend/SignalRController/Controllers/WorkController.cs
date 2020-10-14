@@ -20,7 +20,7 @@ namespace SignalRController.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly Random _random;
         private static Timer _timer;
-        private static int timeOut = 5000;
+        //private static int timeOut = 5000;
         private static bool isWorking = false;
         
 
@@ -31,8 +31,7 @@ namespace SignalRController.Controllers
             _hubImages = hubImages;
             _webHostEnvironment = webHostEnvironment;
             _random = new Random();
-            _timer = new Timer();
-            _timer.Interval = timeOut;
+            _timer = new Timer(5000);
             _timer.AutoReset = false;
             _timer.Elapsed += SendMessagesFromTimer;
         }
@@ -59,14 +58,7 @@ namespace SignalRController.Controllers
 
         public void SendMessageUsers()
         {
-            //if (isWorking)
-            //    return;
-            //isWorking = true;
-            //while (true)
-            //{
-                _hubUser.Clients.All.SendAsync("GetMessages", new UserMessageModel { rand = _random.Next() });
-                //Thread.Sleep(timeOut * 1000);
-            //}
+            _hubUser.Clients.All.SendAsync("GetMessages", new UserMessageModel { rand = _random.Next() });
         }
 
         public void SendMessage(MessageModel user)
@@ -74,13 +66,12 @@ namespace SignalRController.Controllers
             
             if (!string.IsNullOrEmpty(user.Role))
             {
-                if(user.Role != "Admin")
+                _timer.Start();
+                if (user.Role != "Admin")
                 {
-                    _timer.Start();
+                    //_timer.Start();
                     SendMessageAdmin(user);
-                    //SendMessageUsers();
                 }
-                //SendImages();
             }
         }
 
@@ -110,12 +101,23 @@ namespace SignalRController.Controllers
 
         public void SetTimeOutFromAdmin(int sec)
         {
-            timeOut = sec;
-            _timer.Interval = sec;
+            //timeOut = sec;
+            if (isWorking)
+            {
+                _timer.Stop();
+                isWorking = !isWorking;
+            }
+            _timer.Interval = sec*1000;
+            _timer.Start();
         }
 
         private void SendMessagesFromTimer(object sender, ElapsedEventArgs e)
         {
+            if (!isWorking)
+            {
+                isWorking = !isWorking;
+            }
+
             _timer.Enabled = false;
             SendImages();
             SendMessageUsers();

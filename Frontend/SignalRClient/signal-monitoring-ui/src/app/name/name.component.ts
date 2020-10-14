@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-name',
@@ -7,10 +7,12 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class NameComponent {
   userName:string;
-  button: string ="Connect";
-  isConnect: boolean=false;
+  // isConnect: boolean=false;
   @Output()
   sendButton: EventEmitter<any> = new EventEmitter();
+
+  @Input()  button: string;
+  @Input()  isConnect: boolean;
   constructor(){
 
   }
@@ -18,14 +20,14 @@ export class NameComponent {
   async send(){
     if(this.isConnect)
     {
-      this.button = "Connect";
-      this.isConnect=!this.isConnect;
+      // this.button = "Connect";
+      // this.isConnect=!this.isConnect;
       this.sendButton.emit({name:this.userName, status:0});
     }
     else
     {
-      this.button = "Disconnect";
-      this.isConnect=!this.isConnect;
+      // this.button = "Disconnect";
+      // this.isConnect=!this.isConnect;
       this.sendButton.emit({name:this.userName, status:1});
     }
   }

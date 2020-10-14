@@ -29,7 +29,7 @@ export class SignalRService {
   messageObject: UserMessageModel = new UserMessageModel();
   adminMessagesObject: AdminMessageModel = new AdminMessageModel();
   adminObj = new Subject<AdminMessageModel>();
-
+  isConnect = false;
   blobObject = new Subject<BlobModel>();
 
 
@@ -38,27 +38,27 @@ export class SignalRService {
   }
   public async startConnection(user: any) {
     this.setConfigurations(this.adminConfig, this.userConfig, this.imagesConfig);
-    if (user)
-    {
-      this.connection = new signalR.HubConnectionBuilder().withUrl(this.adminConfig.chanelUrl).build();
-      this.connection.on(this.adminConfig.methodName, (mess) => this.mapMessageAdmin(mess));
-    }
-    else
-    {
-      this.connection = new signalR.HubConnectionBuilder().withUrl(this.userConfig.chanelUrl).build();
-      this.connection.on(this.userConfig.methodName, (mess) => this.mapMessageUser(mess));
-    }
-    this.connectionImages = new signalR.HubConnectionBuilder().withUrl(this.imagesConfig.chanelUrl).build();
-    this.connectionImages.on(this.imagesConfig.methodName, (image)=> this.fromBase64ToImage(image));
-    if(this.connection.onclose.length==0)
-    {
-      this.connection.onclose(async (flag)=> {if (flag){await this.startConnection(user);}});
-      this.connectionImages.onclose(async (flag)=> {if (flag){await this.startConnection(user);}});
-    }
     try{
+      if (user)
+      {
+        this.connection = new signalR.HubConnectionBuilder().withUrl(this.adminConfig.chanelUrl).build();
+        this.connection.on(this.adminConfig.methodName, (mess) => this.mapMessageAdmin(mess));
+      }
+      else
+      {
+        this.connection = new signalR.HubConnectionBuilder().withUrl(this.userConfig.chanelUrl).build();
+        this.connection.on(this.userConfig.methodName, (mess) => this.mapMessageUser(mess));
+      }
+      this.connectionImages = new signalR.HubConnectionBuilder().withUrl(this.imagesConfig.chanelUrl).build();
+      this.connectionImages.on(this.imagesConfig.methodName, (image)=> this.fromBase64ToImage(image));
+      if(this.connection.onclose.length==0)
+      {
+        this.connection.onclose(async (flag)=> {if (flag){await this.startConnection(user);}});
+        this.connectionImages.onclose(async (flag)=> {if (flag){await this.startConnection(user);}});
+      }
       this.connection.start();
       this.connectionImages.start();
-      console.log("connected");
+      this.isConnect = true;
     }
     catch(err){
       console.log(err)
@@ -87,6 +87,7 @@ export class SignalRService {
     this.connection.off("GetMessage");
     this.connection.off("GetUsers");
     this.connection.stop();
+    this.isConnect = false;
   };
 
   private mapMessageUser(mess: UserMessageModel): void {
