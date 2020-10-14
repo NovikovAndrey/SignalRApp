@@ -10,6 +10,7 @@
     <img [src]="blob" class="img-thumbnail">
   <div>
     <div *ngIf="isAdmin; else userBlock">
+      <img [src]="blobNext" class="img-thumbnail">
       <form [formGroup]="setTimeOutComboBox" (ngSubmit)="onSubmit()" >
         <select class="combo-box"  formControlName="setTimeOut">
           <option value="" disabled>Set Timeout (sec.)</option>

@@ -33,6 +33,8 @@ export class MainComponent {
   isConnect = false;
   isConnectedParent = false;
   isConnected = false;
+  isNextBlob: boolean = false;
+  blobNext: string;
 
   constructor(private signalRService: SignalRService, public fb: FormBuilder){ }
 
@@ -75,6 +77,7 @@ export class MainComponent {
       if (this.isAdmin)
       {
         this.subscription=this.signalRService.adminMessageReceived().subscribe((adminmessage) => { this.workWithListUsersNames(adminmessage); });
+        this.subscription = this.signalRService.blobNextMessageReceived().subscribe((blob)=> {this.workWithNextBlob(blob)});
       }
       else
       {
@@ -83,6 +86,11 @@ export class MainComponent {
       this.subscription = this.signalRService.blobMessageReceived().subscribe((blob)=> {this.workWithBlob(blob)});
     }
      this.checkConnect(this.signalRService.isConnect);
+  };
+  
+  workWithNextBlob(blob: any) {
+    this.isNextBlob=true;
+    this.blobNext = blob.type+blob.blob;
   };
 
   checkConnect(isConnect: boolean) {

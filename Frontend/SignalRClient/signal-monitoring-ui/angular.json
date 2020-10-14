@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "signal-monitoring-ui"
+    }
+  },
+  "defaultProject": "signal-monitoring-ui",
+  "cli": {
+    "analytics": false
+  }
 }

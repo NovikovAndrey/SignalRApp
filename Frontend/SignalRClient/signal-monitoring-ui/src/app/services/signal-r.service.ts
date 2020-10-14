@@ -14,6 +14,7 @@ import { BlobModel } from '../models/blob-model';
   providedIn: 'root'
 })
 export class SignalRService {
+  
 
   private connection: signalR.HubConnection;
   private connectionImages: signalR.HubConnection;
@@ -24,6 +25,7 @@ export class SignalRService {
   private adminConfig: ConfigModel = new ConfigModel();
   private userConfig: ConfigModel = new ConfigModel();
   private imagesConfig: ConfigModel = new ConfigModel();
+  private nextImageConfig: ConfigModel = new ConfigModel();
 
   usersObj = new Subject<UserMessageModel>();
   messageObject: UserMessageModel = new UserMessageModel();
@@ -31,18 +33,21 @@ export class SignalRService {
   adminObj = new Subject<AdminMessageModel>();
   isConnect = false;
   blobObject = new Subject<BlobModel>();
+  blobNextObject = new Subject<BlobModel>();
+  
 
 
   constructor(private http: HttpClient) {
 
   }
   public async startConnection(user: any) {
-    this.setConfigurations(this.adminConfig, this.userConfig, this.imagesConfig);
+    this.setConfigurations(this.adminConfig, this.userConfig, this.imagesConfig, this.nextImageConfig);
     try{
       if (user)
       {
         this.connection = new signalR.HubConnectionBuilder().withUrl(this.adminConfig.chanelUrl).build();
         this.connection.on(this.adminConfig.methodName, (mess) => this.mapMessageAdmin(mess));
+        this.connection.on(this.nextImageConfig.methodName, (image)=> this.fromBase64ToNextImage(image));
       }
       else
       {
@@ -68,9 +73,12 @@ export class SignalRService {
     }
   };
 
-  setConfigurations(adminConfig: ConfigModel, userConfig: ConfigModel, imagesConfig: ConfigModel) {
+  setConfigurations(adminConfig: ConfigModel, userConfig: ConfigModel, imagesConfig: ConfigModel, nextImageConfig: ConfigModel) {
     adminConfig.chanelUrl = "https://localhost:44389/admin";
     adminConfig.methodName = "GetUsers";
+
+    nextImageConfig.chanelUrl = "https://localhost:44389/admin";
+    nextImageConfig.methodName = "GetNextImages";
 
     userConfig.chanelUrl = "https://localhost:44389/users";
     userConfig.methodName = "GetMessages";
@@ -122,4 +130,12 @@ export class SignalRService {
   public blobMessageReceived(): Observable<BlobModel>{
     return this.blobObject.asObservable();
   };
+
+  private fromBase64ToNextImage(image: BlobModel): void {
+    this.blobNextObject.next(new BlobModel(image.blob, image.type));
+  };
+
+  blobNextMessageReceived(): Observable<BlobModel> {
+    return this.blobNextObject.asObservable();
+  }
 }

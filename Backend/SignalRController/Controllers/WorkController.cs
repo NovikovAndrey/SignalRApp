@@ -98,7 +98,7 @@ namespace SignalRController.Controllers
                                         );
             }
             _nextImage = GetNextImage();
-            _hubImages.Clients.All.SendAsync(
+            _hubAdmin.Clients.All.SendAsync(
                                     "GetNextImages",
                                     new BlodModel
                                         (
