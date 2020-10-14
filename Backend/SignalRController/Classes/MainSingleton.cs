@@ -8,11 +8,11 @@ namespace SignalRController.Classes
 {
     public class MainSingleton
     {
-        private readonly WorkController _workController;
+        //private readonly WorkController _workController;
 
-        public MainSingleton(WorkController workController)
-        {
-            _workController = workController;
-        }
+        //public MainSingleton(WorkController workController)
+        //{
+        //    _workController = workController;
+        //}
     }
 }

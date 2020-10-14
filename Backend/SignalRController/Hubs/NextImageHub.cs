@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SignalRController.Hubs
 {
-    public class ImagesHub: Hub
+    public class NextImageHub: Hub
     {
 
     }

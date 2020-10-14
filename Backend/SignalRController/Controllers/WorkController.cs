@@ -2,7 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Timers;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Connections.Features;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using SignalRController.Hubs;
@@ -20,7 +23,7 @@ namespace SignalRController.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly Random _random;
         private static Timer _timer;
-        //private static int timeOut = 5000;
+        private static string _nextImage;
         private static bool isWorking = false;
         
 
@@ -31,9 +34,13 @@ namespace SignalRController.Controllers
             _hubImages = hubImages;
             _webHostEnvironment = webHostEnvironment;
             _random = new Random();
-            _timer = new Timer(5000);
-            _timer.AutoReset = false;
+            _timer = new Timer(5000)
+            {
+                AutoReset = false
+            };
             _timer.Elapsed += SendMessagesFromTimer;
+
+
         }
 
         [HttpPost]
@@ -63,10 +70,12 @@ namespace SignalRController.Controllers
 
         public void SendMessage(MessageModel user)
         {
-            
             if (!string.IsNullOrEmpty(user.Role))
             {
-                _timer.Start();
+                if (!isWorking)
+                {
+                    _timer.Start();
+                }
                 if (user.Role != "Admin")
                 {
                     //_timer.Start();
@@ -77,21 +86,31 @@ namespace SignalRController.Controllers
 
         private void SendImages()
         {
-            try
+            if (!string.IsNullOrEmpty(_nextImage))
             {
                 _hubImages.Clients.All.SendAsync(
-                                        "GetImages", 
+                                        "GetImages",
                                         new BlodModel
                                             (
-                                                Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(_webHostEnvironment.ContentRootPath, "Images", $"{ _random.Next(1, 10)}.png"))), 
+                                                _nextImage,
                                                 "data:image/png;base64,"
                                             )
                                         );
             }
-            catch
-            {
+            _nextImage = GetNextImage();
+            _hubImages.Clients.All.SendAsync(
+                                    "GetNextImages",
+                                    new BlodModel
+                                        (
+                                            _nextImage,
+                                            "data:image/png;base64,"
+                                        )
+                                    );
+        }
 
-            }
+        private string GetNextImage()
+        {
+            return Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(_webHostEnvironment.ContentRootPath, "Images", $"{ _random.Next(1, 10)}.png")));
         }
 
         private void SendMessageAdmin(MessageModel userName)

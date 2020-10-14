@@ -9,9 +9,6 @@ namespace SignalRController.Hubs
 {
     public class UserHub : Hub
     {
-        public Task SendMessages()
-        {
-            return Clients.All.SendAsync("SendMessages");
-        }
+
     }
 }
