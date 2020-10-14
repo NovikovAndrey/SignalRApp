@@ -17,7 +17,7 @@
     </form>
       <div class="msg-box" >
         <ul>
-            <li *ngFor="let mObj of adminMessagesList">User {{mObj.name}} joined<br />
+            <li *ngFor="let mObj of adminMessagesLog">User {{mObj.Name}} {{mObj.Status}}<br />
             </li>
         </ul>
       </div>
@@ -30,4 +30,5 @@
       </ul>
     </div>
   </ng-template>
+    <img [src]="blob" class="img-thumbnail">
 </div>

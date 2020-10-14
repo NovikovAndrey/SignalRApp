@@ -58,6 +58,7 @@ namespace SignalRController
                 endpoints.MapControllers();
                 endpoints.MapHub<UserHub>("/users");
                 endpoints.MapHub<AdminHub>("/admin");
+                endpoints.MapHub<ImagesHub>("/images");
             });
         }
     }
