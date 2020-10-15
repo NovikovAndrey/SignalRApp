@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -40,6 +41,9 @@ namespace SignalR.Controllers
             _timer.Interval = 5000;
             _timer.AutoReset = false;
             _timer.Elapsed += SendMessagesFromTimer;
+
+            _userActivities.CollectionChanged += _userActivities_CollectionChanged;
+            _activeUsers.CollectionChanged += _activeUsers_CollectionChanged;
 
             SetAdminsCollection();
 
@@ -130,9 +134,60 @@ namespace SignalR.Controllers
         {
         }
 
-        private void SendMessagesFromTimer(object sender, ElapsedEventArgs e)
+        private void _activeUsers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void _userActivities_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SendMessagesFromTimer(object sender, ElapsedEventArgs e)
+        {
+
+            if (!isWorking)
+            {
+                isWorking = !isWorking;
+            }
+
+            _timer.Enabled = false;
+            SendImages();
+            SendMessageForUsers();
+            _timer.Enabled = true;
+        }
+
+        private void SendMessageForUsers()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SendImages()
+        {
+            if (!string.IsNullOrEmpty(_nextImage))
+            {
+                _imagesHub.Clients.All.SendAsync(
+                                        "GetImages",
+                                        new ImageModel
+                                            (
+                                                _nextImage
+                                            )
+                                        );
+            }
+            _nextImage = GetNextImage();
+            _adminsHub.Clients.All.SendAsync(
+                                    "GetNextImages",
+                                    new ImageModel
+                                        (
+                                            _nextImage
+                                        )
+                                    );
+        }
+
+        private string GetNextImage()
+        {
+            return Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(_webHostEnvironment.ContentRootPath, "Images", $"{ _random.Next(1, 10)}.png")));
         }
 
         private void SetAdminsCollection()
