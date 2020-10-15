@@ -24,7 +24,7 @@ namespace SignalR.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly Random _random = new Random();
 
-        private static Timer _timer;
+        private static Timer _timer = new Timer();
         private static string _nextImage;
         private static bool isWorking = false;
         private static ObservableCollection<UserActivitiesModel> _userActivitiesModel = new ObservableCollection<UserActivitiesModel>();
@@ -36,7 +36,16 @@ namespace SignalR.Controllers
             _adminsHub = adminsHub;
             _imagesHub = imagesHub;
             _webHostEnvironment = webHostEnvironment;
+            _timer.Interval = 5000;
+            _timer.AutoReset = false;
+            _timer.Elapsed += SendMessagesFromTimer;
         }
+
+        private void SendMessagesFromTimer(object sender, ElapsedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         // GET: api/<MainController>
         [HttpGet]
         public IEnumerable<string> Get()
