@@ -27,8 +27,9 @@ namespace SignalR.Controllers
         private static Timer _timer = new Timer();
         private static string _nextImage;
         private static bool isWorking = false;
-        private static ObservableCollection<UserActivitiesModel> _userActivitiesModel = new ObservableCollection<UserActivitiesModel>();
-        private static ObservableCollection<ActiveUsersModel> _activeUsersModel = new ObservableCollection<ActiveUsersModel>();
+        private static ObservableCollection<UserActivitiesModel> _userActivities = new ObservableCollection<UserActivitiesModel>();
+        private static ObservableCollection<ActiveUsersModel> _activeUsers = new ObservableCollection<ActiveUsersModel>();
+        private static ObservableCollection<AdminsAccountsModel> _adminsAccountsColection = new ObservableCollection<AdminsAccountsModel>();
 
         public MainController(IHubContext<ClientsHub> clientsHub, IHubContext<AdminsHub> adminsHub, IHubContext<ImagesHub> imagesHub, IWebHostEnvironment webHostEnvironment)
         {
@@ -39,12 +40,58 @@ namespace SignalR.Controllers
             _timer.Interval = 5000;
             _timer.AutoReset = false;
             _timer.Elapsed += SendMessagesFromTimer;
+
+            SetAdminsCollection();
+
         }
 
-        private void SendMessagesFromTimer(object sender, ElapsedEventArgs e)
+        [HttpPost]
+        [Route("getRoles")]
+        public JsonResult GetUserRole([FromBody] string name)
         {
-            throw new NotImplementedException();
+            if (_adminsAccountsColection.Contains(new AdminsAccountsModel(name)))
+            {
+                //if (_adminMessagesCollection.Count > 0)
+                //{
+                //    foreach (var t in _adminMessagesCollection)
+                //    {
+                //        GetUsers(t);
+                //    }
+                //}
+                return new JsonResult(new UsersRoleModel(name, "Admin"));
+            }
+            else
+            {
+                //_adminMessagesCollection.Add(user);
+                return new JsonResult(new UsersRoleModel(name, "User"));
+            }
         }
+
+        [HttpPost]
+        [Route("connect")]
+        public void UserConnect([FromBody] UserActivitiesModel userActivities)
+        {
+            _userActivities.Add(userActivities);
+            _activeUsers.Add(userActivities);
+        }
+
+
+        [HttpPost]
+        [Route("disconnect")]
+        public void UserDisconnect([FromBody] UserActivitiesModel userActivities)
+        {
+            _userActivities.Add(userActivities);
+            foreach(var user in _activeUsers)
+            {
+                if(user.ConnectionId == userActivities.ConnectionId)
+                {
+                    _activeUsers.Remove(user);
+                    break;
+                }
+            }
+
+        }
+
 
         // GET: api/<MainController>
         [HttpGet]
@@ -76,6 +123,19 @@ namespace SignalR.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        private void SendMessagesFromTimer(object sender, ElapsedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SetAdminsCollection()
+        {
+            _adminsAccountsColection.Add(new AdminsAccountsModel("Admin"));
+            _adminsAccountsColection.Add(new AdminsAccountsModel("Admin1"));
+            _adminsAccountsColection.Add(new AdminsAccountsModel("Admin2"));
+            _adminsAccountsColection.Add(new AdminsAccountsModel("Admin3"));
         }
     }
 }
