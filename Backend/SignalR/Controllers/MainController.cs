@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using SignalR.Hubs;
+using SignalR.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,6 +22,13 @@ namespace SignalR.Controllers
         private readonly IHubContext<AdminsHub> _adminsHub;
         private readonly IHubContext<ImagesHub> _imagesHub;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly Random _random = new Random();
+
+        private static Timer _timer;
+        private static string _nextImage;
+        private static bool isWorking = false;
+        private static ObservableCollection<UserActivitiesModel> _userActivitiesModel = new ObservableCollection<UserActivitiesModel>();
+        private static ObservableCollection<ActiveUsersModel> _activeUsersModel = new ObservableCollection<ActiveUsersModel>();
 
         public MainController(IHubContext<ClientsHub> clientsHub, IHubContext<AdminsHub> adminsHub, IHubContext<ImagesHub> imagesHub, IWebHostEnvironment webHostEnvironment)
         {
