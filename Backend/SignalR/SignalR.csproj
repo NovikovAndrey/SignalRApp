@@ -11,8 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Hubs\" />
     <Folder Include="Models\" />
     <Folder Include="Images\" />
   </ItemGroup>
