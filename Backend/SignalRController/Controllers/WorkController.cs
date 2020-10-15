@@ -25,6 +25,7 @@ namespace SignalRController.Controllers
         private static Timer _timer;
         private static string _nextImage;
         private static bool isWorking = false;
+
         
 
         public WorkController(IHubContext<UserHub> hubUser, IHubContext<AdminHub> hubAdmin, IHubContext<ImagesHub> hubImages, IWebHostEnvironment webHostEnvironment)

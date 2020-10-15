@@ -43,7 +43,7 @@ export class MainComponent {
   })
 
   async send(user: AdminMessageModel){
-    this.signalRService.mainConnection();
+    // this.signalRService.mainConnection();
     this.signalRService.getUserRole(user).subscribe((data)=> {this.parseMesageModel(data, user.status);});
   };
 
@@ -88,7 +88,7 @@ export class MainComponent {
     }
      this.checkConnect(this.signalRService.isConnect);
   };
-  
+
   workWithNextBlob(blob: any) {
     this.isNextBlob=true;
     this.blobNext = blob.type+blob.blob;
