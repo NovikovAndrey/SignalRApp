@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Timers;
@@ -25,9 +27,9 @@ namespace SignalRController.Controllers
         private static Timer _timer;
         private static string _nextImage;
         private static bool isWorking = false;
+        private static ObservableCollection<AdminMessagesModel> _adminMessagesCollection = new ObservableCollection<AdminMessagesModel>();
 
         
-
         public WorkController(IHubContext<UserHub> hubUser, IHubContext<AdminHub> hubAdmin, IHubContext<ImagesHub> hubImages, IWebHostEnvironment webHostEnvironment)
         {
             _hubUser = hubUser;
@@ -40,8 +42,13 @@ namespace SignalRController.Controllers
                 AutoReset = false
             };
             _timer.Elapsed += SendMessagesFromTimer;
+            _adminMessagesCollection.CollectionChanged += GetUsersFromHistory;
 
+        }
 
+        private void GetUsersFromHistory(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            var t = e.NewItems;
         }
 
         [HttpPost]
@@ -50,18 +57,26 @@ namespace SignalRController.Controllers
         {
             if ((new[] { "Admin", "Admin1", "Admin2" }).Contains(user.Name))
             {
+                if (_adminMessagesCollection.Count>0)
+                {
+                    foreach(var t in _adminMessagesCollection)
+                    {
+                        GetUsers(t);
+                    }
+                }
                 return new JsonResult(new UserRoleModel(user.Name, "Admin"));
             }
             else
             {
+                _adminMessagesCollection.Add(user);
                 return new JsonResult(new UserRoleModel(user.Name, "User"));
             }
         }
 
-        private IActionResult GetUsers(MessageModel user)
+        private void GetUsers(AdminMessagesModel user)
         {
-            _hubAdmin.Clients.All.SendAsync("GetUsers", new { Name=user.Name, Status=user.Status });
-            return Ok();
+            _hubAdmin.Clients.All.SendAsync("GetUsers", user);
+            //return Ok();
         }
 
         public void SendMessageUsers()
@@ -80,7 +95,7 @@ namespace SignalRController.Controllers
                 if (user.Role != "Admin")
                 {
                     //_timer.Start();
-                    SendMessageAdmin(user);
+                    SendMessageAdmin(new AdminMessagesModel(user.Name, user.Status));
                 }
             }
         }
@@ -114,7 +129,7 @@ namespace SignalRController.Controllers
             return Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(_webHostEnvironment.ContentRootPath, "Images", $"{ _random.Next(1, 10)}.png")));
         }
 
-        private void SendMessageAdmin(MessageModel userName)
+        private void SendMessageAdmin(AdminMessagesModel userName)
         {
             GetUsers(userName);
         }

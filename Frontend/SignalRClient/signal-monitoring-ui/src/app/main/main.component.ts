@@ -130,6 +130,7 @@ export class MainComponent {
       let temp = this.adminMessagesList.findIndex(element=> element.name==adminmessage.name);
       this.adminMessagesList.splice(temp, 1);
     }
-    this.adminMessagesLog.push(new AdminMessagesLog(adminmessage.name, adminmessage.status))
+    this.adminMessagesLog.push(new AdminMessagesLog(adminmessage.name, adminmessage.status));
+    // this.adminMessagesLog.reverse();
   };
 }
