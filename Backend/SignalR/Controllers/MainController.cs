@@ -56,7 +56,7 @@ namespace SignalR.Controllers
         [Route("getRoles")]
         public JsonResult GetUserRole(string name)
         {
-            if (_adminsAccountsColection.ToList().con.con (new AdminsAccountsModel(name)))
+            if (_adminsAccountsColection.ToList().Contains(new AdminsAccountsModel(name)))
             {
                 return new JsonResult(new UsersRoleModel(name, "Admin"));
             }
