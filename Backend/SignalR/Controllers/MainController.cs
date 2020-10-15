@@ -167,22 +167,10 @@ namespace SignalR.Controllers
         {
             if (!string.IsNullOrEmpty(_nextImage))
             {
-                _imagesHub.Clients.All.SendAsync(
-                                        "GetImages",
-                                        new ImageModel
-                                            (
-                                                _nextImage
-                                            )
-                                        );
+                _imagesHub.Clients.All.SendAsync("GetImages", new ImageModel(_nextImage));
             }
             _nextImage = GetNextImage();
-            _adminsHub.Clients.All.SendAsync(
-                                    "GetNextImages",
-                                    new ImageModel
-                                        (
-                                            _nextImage
-                                        )
-                                    );
+            _adminsHub.Clients.All.SendAsync("GetNextImages", new ImageModel(_nextImage));
         }
 
         private string GetNextImage()
