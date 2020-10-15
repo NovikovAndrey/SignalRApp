@@ -51,18 +51,10 @@ namespace SignalR.Controllers
         {
             if (_adminsAccountsColection.Contains(new AdminsAccountsModel(name)))
             {
-                //if (_adminMessagesCollection.Count > 0)
-                //{
-                //    foreach (var t in _adminMessagesCollection)
-                //    {
-                //        GetUsers(t);
-                //    }
-                //}
                 return new JsonResult(new UsersRoleModel(name, "Admin"));
             }
             else
             {
-                //_adminMessagesCollection.Add(user);
                 return new JsonResult(new UsersRoleModel(name, "User"));
             }
         }
@@ -89,7 +81,20 @@ namespace SignalR.Controllers
                     break;
                 }
             }
+        }
 
+        [HttpGet]
+        [Route("getActiveUsers")]
+        public JsonResult GetActiveUsers()
+        {
+            return new JsonResult(6);
+        }
+
+        [HttpGet]
+        [Route("getUsersActivities")]
+        public JsonResult GetUsersActivities()
+        {
+            return new JsonResult(6);
         }
 
 
