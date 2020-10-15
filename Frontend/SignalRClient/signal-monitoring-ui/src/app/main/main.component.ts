@@ -43,6 +43,7 @@ export class MainComponent {
   })
 
   async send(user: AdminMessageModel){
+    this.signalRService.mainConnection();
     this.signalRService.getUserRole(user).subscribe((data)=> {this.parseMesageModel(data, user.status);});
   };
 
