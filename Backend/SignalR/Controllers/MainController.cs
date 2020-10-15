@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -134,14 +135,22 @@ namespace SignalR.Controllers
         {
         }
 
-        private void _activeUsers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void _activeUsers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            _adminsHub.Clients.All.SendAsync("SendActiveClients", _activeUsers);
         }
 
-        private void _userActivities_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void _userActivities_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                _adminsHub.Clients.All.SendAsync("SendActivitiesClient", (UserActivitiesModel)e.NewItems[0]);
+            }
+            else
+                if (e.Action == NotifyCollectionChangedAction.Remove)
+                {
+                    _adminsHub.Clients.All.SendAsync("SendActivitiesClient", (UserActivitiesModel)e.OldItems[0]);
+                }
         }
 
         private void SendMessagesFromTimer(object sender, ElapsedEventArgs e)
@@ -154,13 +163,13 @@ namespace SignalR.Controllers
 
             _timer.Enabled = false;
             SendImages();
-            SendMessageForUsers();
+            SendMessageForClients();
             _timer.Enabled = true;
         }
 
-        private void SendMessageForUsers()
+        private void SendMessageForClients()
         {
-            throw new NotImplementedException();
+            _clientsHub.Clients.All.SendAsync("GetMessages", new { rand = _random.Next() });
         }
 
         private void SendImages()
