@@ -46,15 +46,17 @@ namespace SignalR.Controllers
             _userActivities.CollectionChanged += _userActivities_CollectionChanged;
             _activeUsers.CollectionChanged += _activeUsers_CollectionChanged;
 
-            SetAdminsCollection();
-
+            if (_adminsAccountsColection.Count==0)
+            {
+                SetAdminsCollection();
+            }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("getRoles")]
-        public JsonResult GetUserRole([FromBody] string name)
+        public JsonResult GetUserRole(string name)
         {
-            if (_adminsAccountsColection.Contains(new AdminsAccountsModel(name)))
+            if (_adminsAccountsColection.ToList().con.con (new AdminsAccountsModel(name)))
             {
                 return new JsonResult(new UsersRoleModel(name, "Admin"));
             }
