@@ -11,7 +11,7 @@ namespace SignalR.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            await Clients.Client(Context.ConnectionId).SendAsync("Hi", Context.ConnectionId);
+            //await Clients.Client(Context.ConnectionId).SendAsync("Hi", Context.ConnectionId);
             await base.OnConnectedAsync();
         }
         public override async Task OnDisconnectedAsync(Exception exception)

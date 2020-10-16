@@ -7,15 +7,14 @@ namespace SignalR.Models
 {
     public class ActiveUsersModel
     {
-        public string Name { get; set; }
         public string ConnectionId { get; set; }
         public string Role { get; set; }
-
+        public string Name { get; set; }
         public ActiveUsersModel() { }
-        public ActiveUsersModel(string name, string connectionId, string role)
+        public ActiveUsersModel(string connectionId, string name, string role)
         {
-            Name = name;
             ConnectionId = connectionId;
+            Name = name;
             Role = role;
         }
     }

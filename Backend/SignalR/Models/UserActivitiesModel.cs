@@ -10,7 +10,7 @@ namespace SignalR.Models
     {
         public int Status { get; set; }
 
-        public UserActivitiesModel(string name, string connectionId, string role, int status): base(name, connectionId, role)
+        public UserActivitiesModel(string connectionId, string name, string role, int status): base(connectionId, name, role)
         {
             Status = status;
         }

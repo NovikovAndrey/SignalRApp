@@ -10,6 +10,7 @@ import { UserRoleModel } from '../models/user-role';
 import { MessageModel } from '../models/message';
 import { BlobModel } from '../models/blob-model';
 import { AdminMessagesLog } from '../models/admin-message-log-model';
+import { ActiveUsersModel } from '../models/active-users-model';
 
 @Component({
   selector: 'app-main',
@@ -23,6 +24,7 @@ export class MainComponent {
   msgDto: UserMessageModel = new UserMessageModel();
   userMessagesList: UserMessageModel[] = [];
   adminMessagesList: AdminMessageModel[] = [];
+  activeUsersList: ActiveUsersModel[] = [];
   adminMessagesLog: AdminMessagesLog[] = [];
   subscription: Subscription;
   userName:string;
@@ -67,17 +69,19 @@ export class MainComponent {
   connections(user: MessageModel) {
     if (user.status==0)
     {
-      this.signalRService.broadcastMessage(user);
+      // this.signalRService.broadcastMessage(user);
       this.subscription.unsubscribe();
-      this.signalRService.stopConnection();
+      this.signalRService.stopConnection(user);
     }
     else
     {
-      this.signalRService.startConnection(this.isAdmin);
-      this.signalRService.broadcastMessage(user);
+      this.signalRService.startConnection(user, this.isAdmin);
+      // this.signalRService.broadcastMessage(user);
       if (this.isAdmin)
       {
-        this.subscription=this.signalRService.adminMessageReceived().subscribe((adminmessage) => { this.workWithListUsersNames(adminmessage); });
+        this.subscription=this.signalRService.activeUsersReceived().subscribe((adminmessage) => { this.workWithListActiveUsers(adminmessage); });
+        this.subscription=this.signalRService.usersActivitiesReceived().subscribe((adminmessage) => { this.workWithUsersActivities(adminmessage); });
+        // this.subscription=this.signalRService.adminMessageReceived().subscribe((adminmessage) => { this.workWithListUsersNames(adminmessage); });
         this.subscription = this.signalRService.blobNextMessageReceived().subscribe((blob)=> {this.workWithNextBlob(blob)});
       }
       else
@@ -87,6 +91,10 @@ export class MainComponent {
       this.subscription = this.signalRService.blobMessageReceived().subscribe((blob)=> {this.workWithBlob(blob)});
     }
      this.checkConnect(this.signalRService.isConnect);
+  };
+
+  workWithUsersActivities(adminmessage: AdminMessagesLog) {
+    this.adminMessagesLog.push(adminmessage);
   };
 
   workWithNextBlob(blob: any) {
@@ -120,17 +128,23 @@ export class MainComponent {
     this.signalRService.setTimeOutMessage(this.setTimeOutComboBox.value);
   };
 
-  workWithListUsersNames(adminmessage: AdminMessageModel) {
-    if(adminmessage.status==1)
-    {
-      this.adminMessagesList.push(adminmessage);
-    }
-    else
-    {
-      let temp = this.adminMessagesList.findIndex(element=> element.name==adminmessage.name);
-      this.adminMessagesList.splice(temp, 1);
-    }
-    this.adminMessagesLog.push(new AdminMessagesLog(adminmessage.name, adminmessage.status));
-    // this.adminMessagesLog.reverse();
+  workWithListActiveUsers(adminmessage: ActiveUsersModel[]) {
+    this.activeUsersList.splice(0, this.activeUsersList.length);
+    adminmessage.forEach((value) => {this.activeUsersList.push(value);});
+    // this.activeUsersList.push(adminmessage);
   };
+
+  // workWithListUsersNames(adminmessage: AdminMessageModel) {
+  //   if(adminmessage.status==1)
+  //   {
+  //     this.adminMessagesList.push(adminmessage);
+  //   }
+  //   else
+  //   {
+  //     let temp = this.adminMessagesList.findIndex(element=> element.name==adminmessage.name);
+  //     this.adminMessagesList.splice(temp, 1);
+  //   }
+  //   this.adminMessagesLog.push(new AdminMessagesLog(adminmessage.name, adminmessage.status));
+  //   // this.adminMessagesLog.reverse();
+  // };
 }

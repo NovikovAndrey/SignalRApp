@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SignalR.Controllers;
+using SignalR.Hubs;
 
 namespace SignalR
 {
@@ -27,6 +29,15 @@ namespace SignalR
         {
             services.AddControllers();
             services.AddSignalR();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                    builder.WithOrigins("http://localhost:4200")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+            services.AddSingleton<MainController>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,7 +49,7 @@ namespace SignalR
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors("CorsPolicy");
             app.UseRouting();
 
             app.UseAuthorization();
@@ -46,6 +57,9 @@ namespace SignalR
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ClientsHub>("/Clients");
+                endpoints.MapHub<AdminsHub>("/Admins");
+                endpoints.MapHub<ImagesHub>("/Images");
             });
         }
     }

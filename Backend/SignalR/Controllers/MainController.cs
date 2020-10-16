@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
 using Microsoft.AspNetCore.Hosting;
@@ -23,6 +24,7 @@ namespace SignalR.Controllers
         private readonly IHubContext<ClientsHub> _clientsHub;
         private readonly IHubContext<AdminsHub> _adminsHub;
         private readonly IHubContext<ImagesHub> _imagesHub;
+
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly Random _random = new Random();
 
@@ -39,16 +41,17 @@ namespace SignalR.Controllers
             _adminsHub = adminsHub;
             _imagesHub = imagesHub;
             _webHostEnvironment = webHostEnvironment;
-            _timer.Interval = 5000;
-            _timer.AutoReset = false;
-            _timer.Elapsed += SendMessagesFromTimer;
-
-            _userActivities.CollectionChanged += _userActivities_CollectionChanged;
-            _activeUsers.CollectionChanged += _activeUsers_CollectionChanged;
+            
 
             if (_adminsAccountsColection.Count==0)
             {
                 SetAdminsCollection();
+                _timer.Interval = 5000;
+                _timer.AutoReset = false;
+                _timer.Elapsed += SendMessagesFromTimer;
+                _timer.Start();
+                _userActivities.CollectionChanged += _userActivities_CollectionChanged;
+                _activeUsers.CollectionChanged += _activeUsers_CollectionChanged;
             }
         }
 
@@ -56,7 +59,7 @@ namespace SignalR.Controllers
         [Route("getRoles")]
         public JsonResult GetUserRole(string name)
         {
-            if (_adminsAccountsColection.ToList().Contains(new AdminsAccountsModel(name)))
+            if (_adminsAccountsColection.Any(a => a.Name == name))
             {
                 return new JsonResult(new UsersRoleModel(name, "Admin"));
             }
@@ -66,23 +69,19 @@ namespace SignalR.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("connect")]
-        public void UserConnect([FromBody] UserActivitiesModel userActivities)
+        public static void UserConnect(string connectionId, string name, string role, int status)
         {
-            _userActivities.Add(userActivities);
-            _activeUsers.Add(userActivities);
+            //_userActivities.Add(new UserActivitiesModel(connectionId, name, role, status));
+            _activeUsers.Add(new UserActivitiesModel(connectionId, name, role, status));
         }
 
-
-        [HttpPost]
-        [Route("disconnect")]
-        public void UserDisconnect([FromBody] UserActivitiesModel userActivities)
+        public static void UserDisconnect(string connectionId, string name, string role, int status)
         {
-            _userActivities.Add(userActivities);
+            var tempModel = new UserActivitiesModel(connectionId, name, role, status);
+            //_userActivities.Add(tempModel);
             foreach(var user in _activeUsers)
             {
-                if(user.ConnectionId == userActivities.ConnectionId)
+                if(user.ConnectionId == tempModel.ConnectionId)
                 {
                     _activeUsers.Remove(user);
                     break;
@@ -90,12 +89,26 @@ namespace SignalR.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("getActiveUsers")]
-        public JsonResult GetActiveUsers()
+        internal static void UserDisconnect(string connectionId)
         {
-            return new JsonResult(6);
+            //var tempModel = new UserActivitiesModel(connectionId, name, role, status);
+            //_userActivities.Add(tempModel);
+            foreach (var user in _activeUsers)
+            {
+                if (user.ConnectionId == connectionId)
+                {
+                    _activeUsers.Remove(user);
+                    break;
+                }
+            }
         }
+
+        //[HttpGet]
+        //[Route("getActiveUsers")]
+        //public JsonResult GetActiveUsers()
+        //{
+        //    return new JsonResult(6);
+        //}
 
         [HttpGet]
         [Route("getUsersActivities")]
@@ -104,55 +117,37 @@ namespace SignalR.Controllers
             return new JsonResult(6);
         }
 
-
-        // GET: api/<MainController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<MainController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<MainController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<MainController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<MainController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-
         private void _activeUsers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             _adminsHub.Clients.All.SendAsync("SendActiveClients", _activeUsers);
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                SendMessage(e.NewItems[0], 1);
+            }
+            else 
+                if (e.Action == NotifyCollectionChangedAction.Remove)
+                {
+                    SendMessage(e.OldItems[0], 0);
+                }
+        }
+
+        private void SendMessage(object v, int status)
+        {
+            var t = (ActiveUsersModel)v;
+            _adminsHub.Clients.All.SendAsync("SendActivitiesClient", new UserActivitiesModel(t.ConnectionId, t.Name, t.Role, status));
         }
 
         private void _userActivities_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add)
-            {
-                _adminsHub.Clients.All.SendAsync("SendActivitiesClient", (UserActivitiesModel)e.NewItems[0]);
-            }
-            else
-                if (e.Action == NotifyCollectionChangedAction.Remove)
-                {
-                    _adminsHub.Clients.All.SendAsync("SendActivitiesClient", (UserActivitiesModel)e.OldItems[0]);
-                }
+            //if (e.Action == NotifyCollectionChangedAction.Add)
+            //{
+            //    _adminsHub.Clients.All.SendAsync("SendActivitiesClient", (UserActivitiesModel)e.NewItems[0]);
+            //}
+            //else
+            //    if (e.Action == NotifyCollectionChangedAction.Remove)
+            //    {
+            //        _adminsHub.Clients.All.SendAsync("SendActivitiesClient", (UserActivitiesModel)e.OldItems[0]);
+            //    }
         }
 
         private void SendMessagesFromTimer(object sender, ElapsedEventArgs e)
@@ -196,5 +191,6 @@ namespace SignalR.Controllers
             _adminsAccountsColection.Add(new AdminsAccountsModel("Admin2"));
             _adminsAccountsColection.Add(new AdminsAccountsModel("Admin3"));
         }
+
     }
 }
