@@ -30,6 +30,7 @@ namespace SignalR.Hubs
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
+            MainController.UserDisconnect(Context.ConnectionId);
             //MainController.UserDisconnect(Context.ConnectionId, "Admin", 0);
             //await Clients.All.SendAsync("Notify", $"{Context.ConnectionId} покинул в чат");
             await base.OnDisconnectedAsync(exception);

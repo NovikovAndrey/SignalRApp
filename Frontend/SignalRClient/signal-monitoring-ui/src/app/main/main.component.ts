@@ -81,7 +81,6 @@ export class MainComponent {
       {
         this.subscription=this.signalRService.activeUsersReceived().subscribe((adminmessage) => { this.workWithListActiveUsers(adminmessage); });
         this.subscription=this.signalRService.usersActivitiesReceived().subscribe((adminmessage) => { this.workWithUsersActivities(adminmessage); });
-        // this.subscription=this.signalRService.adminMessageReceived().subscribe((adminmessage) => { this.workWithListUsersNames(adminmessage); });
         this.subscription = this.signalRService.blobNextMessageReceived().subscribe((blob)=> {this.workWithNextBlob(blob)});
       }
       else
