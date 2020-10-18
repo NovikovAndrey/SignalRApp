@@ -11,6 +11,7 @@ import { MessageModel } from '../models/message';
 import { BlobModel } from '../models/blob-model';
 import { AdminMessagesLog } from '../models/admin-message-log-model';
 import { ActiveUsersModel } from '../models/active-users-model';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-main',
@@ -18,7 +19,9 @@ import { ActiveUsersModel } from '../models/active-users-model';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent {
-  public columns: string[]=["Name", "status"];
+  public columns: string[]=["Messages"];
+  public messages = new MatTableDataSource<ActiveUsersModel>();
+
   isAdmin:boolean = false;
   isBlob: boolean = false;
   msgDto: UserMessageModel = new UserMessageModel();
@@ -130,6 +133,7 @@ export class MainComponent {
   workWithListActiveUsers(adminmessage: ActiveUsersModel[]) {
     this.activeUsersList.splice(0, this.activeUsersList.length);
     adminmessage.forEach((value) => {this.activeUsersList.push(value);});
+    this.messages.data =this.activeUsersList;
     // this.activeUsersList.push(adminmessage);
   };
 

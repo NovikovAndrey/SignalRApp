@@ -19,7 +19,7 @@ export class SignalRService {
 
   private connection: signalR.HubConnection;
   private connectionImages: signalR.HubConnection;
-  readonly POST_URL_SetTimeOut: string  = "https://localhost:44389/api/admin/setTimeOut";
+  readonly POST_URL_SetTimeOut: string  = "https://localhost:44353/api/main/setTimeOut";
   readonly POST_URL_GetUserRole: string = "https://localhost:44353/api/main/getRoles";
 
   private adminConfig: ConfigModel;

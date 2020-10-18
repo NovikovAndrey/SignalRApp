@@ -117,6 +117,20 @@ namespace SignalR.Controllers
             return new JsonResult(6);
         }
 
+        [HttpPost]
+        [Route("setTimeOut")]
+        public void SetTimeOutFromAdmin([FromBody] TimeOutModel timeOutUserMesssage)
+        {
+            //timeOut = sec;
+            if (isWorking)
+            {
+                _timer.Stop();
+                isWorking = !isWorking;
+            }
+            _timer.Interval = timeOutUserMesssage.setTimeOut * 1000;
+            _timer.Start();
+        }
+
         private void _activeUsers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             _adminsHub.Clients.All.SendAsync("SendActiveClients", _activeUsers);

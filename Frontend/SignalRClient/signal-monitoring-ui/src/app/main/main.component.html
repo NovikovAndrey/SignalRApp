@@ -1,30 +1,34 @@
 <div class="ud-header">
   <h2 class="text-center">CheckUsers</h2>
-
-</div>
-<div>
-
 </div>
 <div class="ud-body">
   <app-name (sendButton)="send($event)" [button]="buttonConnect" [isConnect]="isConnect"></app-name>
+    
     <div *ngIf="isAdmin; else userBlock">
 
-      <form [formGroup]="setTimeOutComboBox" (ngSubmit)="onSubmit()" >
+      <form [formGroup]="setTimeOutComboBox"  >
         <select class="combo-box"  formControlName="setTimeOut">
           <option value="" disabled>Set Timeout (sec.)</option>
           <option *ngFor="let sec of timeOuts" [ngValue] = "sec.value">{{sec.name}}</option>
         </select>
         <button class="send-btn" (click)= "onSubmit()">Set timeout</button>
       </form>
+      
         <div class="table">
-          <!-- <div class="activeUsers-box" > -->
-            <ul class="activeUsers-box">
-                <li *ngFor="let mObj of activeUsersList" class="ex-msg">User {{mObj.name}} active</li>
-            </ul>
-          <!-- </div> -->
-
-          <img [src]="blob" class="img-thumbnail">
-          <img [src]="blobNext" class="img-thumbnail">
+          <div>
+            <table mat-table [dataSource]="messages" class="activeUsers-box" [hidden]="!messages">
+              <!-- Message Column -->
+              <ng-container matColumnDef="Messages">
+                <th mat-header-cell *matHeaderCellDef>Active users</th>
+                <td mat-cell *matCellDef="let mess"> {{mess.name}} </td>
+              </ng-container>
+            
+              <tr mat-header-row *matHeaderRowDef="columns"></tr>
+              <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+            </table>
+          </div>
+            <img [src]="blob" class="img-thumbnail">
+            <img [src]="blobNext" class="img-thumbnail">
         </div>
         <div class="log-box" >
           <ul>

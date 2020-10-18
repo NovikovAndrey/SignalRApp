@@ -114,7 +114,7 @@ h2 {
   }
 
   .log-box {
-    width: 100%;
+    // width: 100%;
     min-width: 200px;
     max-height: 140px;
     margin-top: 20px;
@@ -122,8 +122,9 @@ h2 {
     border-radius: .5em;
     padding: 10px 30px;
     font-size: 14px;
-
     overflow: auto;
+    // position: fixed;
+    bottom: 0px;
 
     ul {
         list-style: none;
