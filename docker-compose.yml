@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+    signalr:
+        image: ${REGISTRY:-signalr}/backsignalr:${PLATFORM:-linux}-${TAG:-latest}
+        build:
+          context: .
+          dockerfile: Backend/SignalR/Dockerfile

@@ -1,0 +1,6 @@
+version: "3.8"
+services:
+    signalr:
+        ports:
+        - "32771:80"
+        - "32772:443"

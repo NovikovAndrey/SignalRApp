@@ -10,6 +10,7 @@ import { MessageModel } from '../models/message';
 import { BlobModel } from '../models/blob-model';
 import { ActiveUsersModel } from '../models/active-users-model';
 import { AdminMessagesLog } from '../models/admin-message-log-model';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -19,8 +20,8 @@ export class SignalRService {
 
   private connection: signalR.HubConnection;
   private connectionImages: signalR.HubConnection;
-  readonly POST_URL_SetTimeOut: string  = "https://localhost:44353/api/main/setTimeOut";
-  readonly POST_URL_GetUserRole: string = "https://localhost:44353/api/main/getRoles";
+  private POST_URL_SetTimeOut: string;
+  private POST_URL_GetUserRole: string;
 
   private adminConfig: ConfigModel;
   private userConfig: ConfigModel;
@@ -37,10 +38,16 @@ export class SignalRService {
   blobNextObject = new Subject<BlobModel>();
   activeUserObj = new Subject<ActiveUsersModel[]>();
   activitiesUserObj = new Subject<AdminMessagesLog>();
+  workUrl: string;
+  baseUrl: string;
 
   constructor(private http: HttpClient) {
+    this.baseUrl = environment.apiUrl;
+    this.POST_URL_SetTimeOut = this.baseUrl.concat("/api/main/setTimeOut");
+    this.POST_URL_GetUserRole = this.baseUrl.concat("/api/main/getRoles");
 
   }
+
   public async startConnection(user: MessageModel, isAdmin: boolean) {
     this.setConfigurations();
     try{
@@ -93,15 +100,15 @@ export class SignalRService {
 
   setConfigurations() {
 
-    this.adminConfig = new ConfigModel("https://localhost:44353/Admins", "SendActiveClients");
+    this.adminConfig = new ConfigModel(this.baseUrl.concat("/Admins"), "SendActiveClients");
 
-    this.nextImageConfig = new ConfigModel("https://localhost:44353/Admins", "GetNextImages");
+    this.nextImageConfig = new ConfigModel(this.baseUrl.concat("/Admins"), "GetNextImages");
 
-    this.userActivitiesConfig = new ConfigModel("https://localhost:44353/Admins", "SendActivitiesClient");
+    this.userActivitiesConfig = new ConfigModel(this.baseUrl.concat("/Admins"), "SendActivitiesClient");
 
-    this.userConfig = new ConfigModel("https://localhost:44353/Clients", "GetMessages");
-    
-    this.imagesConfig = new ConfigModel("https://localhost:44353/Images", "GetImages");
+    this.userConfig = new ConfigModel(this.baseUrl.concat("/Clients"), "GetMessages");
+
+    this.imagesConfig = new ConfigModel(this.baseUrl.concat("/Images"), "GetImages");
   };
 
   private mapActiveUsers(mess: ActiveUsersModel[]): void {
@@ -128,7 +135,7 @@ export class SignalRService {
     this.connection = null;
     this.isConnect = false;
   };
-  
+
   cleaningAdminssSubscribes(activeUserObj: Subject<ActiveUsersModel[]>, activitiesUserObj: Subject<AdminMessagesLog>, blobNextObject: Subject<BlobModel>, blobObject: Subject<BlobModel>) {
     activeUserObj.observers.splice(0, activeUserObj.observers.length)
     activitiesUserObj.observers.splice(0, activitiesUserObj.observers.length)
@@ -144,7 +151,7 @@ export class SignalRService {
   public usersMessageReceived(): Observable<UserMessageModel> {
       return this.usersObj.asObservable();
   };
-  
+
   cleaningClientsSubscribes(firstObj: Subject<any>, secondObj: Subject<any> ) {
     firstObj.observers.splice(0, firstObj.observers.length)
     secondObj.observers.splice(0, secondObj.observers.length)
