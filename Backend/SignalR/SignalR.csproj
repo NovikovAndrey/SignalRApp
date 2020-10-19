@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>90194db3-3ef0-45a7-903a-ebed794be1ad</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
