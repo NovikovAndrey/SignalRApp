@@ -25,7 +25,7 @@ namespace SignalR.Controllers
         private readonly IHubContext<AdminsHub> _adminsHub;
         private readonly IHubContext<ImagesHub> _imagesHub;
 
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private static IWebHostEnvironment _webHostEnvironment;
         private readonly Random _random = new Random();
 
         private static Timer _timer = new Timer();
@@ -35,13 +35,19 @@ namespace SignalR.Controllers
         private static ObservableCollection<ActiveUsersModel> _activeUsers = new ObservableCollection<ActiveUsersModel>();
         private static ObservableCollection<AdminsAccountsModel> _adminsAccountsColection = new ObservableCollection<AdminsAccountsModel>();
 
+        private readonly List<string> _picturesNames;
+        private int _currentIndex;
+
         public MainController(IHubContext<ClientsHub> clientsHub, IHubContext<AdminsHub> adminsHub, IHubContext<ImagesHub> imagesHub, IWebHostEnvironment webHostEnvironment)
         {
             _clientsHub = clientsHub;
             _adminsHub = adminsHub;
             _imagesHub = imagesHub;
             _webHostEnvironment = webHostEnvironment;
-            
+            _picturesNames = LoadPicturesNames();
+
+            _currentIndex = 0;
+
 
             if (_adminsAccountsColection.Count==0)
             {
@@ -53,6 +59,15 @@ namespace SignalR.Controllers
                 _userActivities.CollectionChanged += _userActivities_CollectionChanged;
                 _activeUsers.CollectionChanged += _activeUsers_CollectionChanged;
             }
+        }
+
+        private List<string> LoadPicturesNames()
+        {
+            var pictures = new List<string>();
+            var t = new DirectoryInfo(Path.Combine(_webHostEnvironment.ContentRootPath, "Images"));
+            pictures.AddRange(t.GetFiles("*.png").Select(f=>f.FullName));
+            return pictures;
+
         }
 
         [HttpGet]
@@ -153,15 +168,7 @@ namespace SignalR.Controllers
 
         private void _userActivities_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            //if (e.Action == NotifyCollectionChangedAction.Add)
-            //{
-            //    _adminsHub.Clients.All.SendAsync("SendActivitiesClient", (UserActivitiesModel)e.NewItems[0]);
-            //}
-            //else
-            //    if (e.Action == NotifyCollectionChangedAction.Remove)
-            //    {
-            //        _adminsHub.Clients.All.SendAsync("SendActivitiesClient", (UserActivitiesModel)e.OldItems[0]);
-            //    }
+
         }
 
         private void SendMessagesFromTimer(object sender, ElapsedEventArgs e)
@@ -195,7 +202,12 @@ namespace SignalR.Controllers
 
         private string GetNextImage()
         {
-            return Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(_webHostEnvironment.ContentRootPath, "Images", $"{ _random.Next(1, 10)}.png")));
+            return Convert.ToBase64String(System.IO.File.ReadAllBytes(_picturesNames[GetNextIndex()]));
+        }
+
+        private int GetNextIndex()
+        {
+            return _currentIndex = _currentIndex < _picturesNames.Count - 1 ? _currentIndex + 1 : 0;
         }
 
         private void SetAdminsCollection()

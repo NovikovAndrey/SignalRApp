@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MainComponent } from './main/main.component';
 import { NameComponent } from './name/name.component';
 import { AngularMaterialModule } from './angular-materials';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 
@@ -25,7 +26,8 @@ import { AngularMaterialModule } from './angular-materials';
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]
