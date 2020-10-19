@@ -1,5 +1,4 @@
 .name-box {
-  margin-top: 10px;
   height: auto;
   width: 180px;
   border-radius: .5em;
@@ -13,16 +12,18 @@
   outline: none;
 }
 
+.mainButton{
+  width: 425px;
+}
+
 .send-btn {
   height: auto;
   width: auto;
   border-radius: .3em;
   background-color: #DD1155;
-  margin-left: 20px;
   border: 0px solid rgba(0, 0, 0, 0);
   font-size: 25px;
   color: #FDFFFF;
-  position: relative;
 }
 
 .send-btn:focus {

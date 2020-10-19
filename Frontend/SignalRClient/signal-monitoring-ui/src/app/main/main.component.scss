@@ -1,5 +1,4 @@
 .time-box {
-  margin-top: 10px;
   height: auto;
   width: 180px;
   border-radius: .5em;
@@ -11,10 +10,6 @@
 
 .time-box:focus {
   outline: none;
-}
-
-.tableHeaders{
-
 }
 
 .send-cmb {
@@ -35,12 +30,6 @@
   box-shadow: 0 0 5px #DD1155;
 }
 
-.header{
-
-  }
-.mainMenu{
-
-  }
 .activeUsers{
 
   max-height: 300px;
@@ -51,10 +40,6 @@
   border: 2px solid #191D32;
   border-radius: .5em;
   overflow: auto;
-}
-
-.setTimeOut{
-    // background-color:red;
 }
 
 .log{
@@ -82,7 +67,7 @@
 
 .images{
   display: block;
-  margin: 10px;
+  margin-left: 10px;
 }
 
 .msg-box{
@@ -90,7 +75,7 @@
   border: 2px solid #191D32;
   border-radius: .5em;
   max-height: 400px;
-  min-width: 200px;
+  min-width: 250px;
   overflow: auto;
 }
 
@@ -123,4 +108,13 @@
 
 .userImageHeader{
   margin-left: 20px;
+}
+
+.messages{
+  width: 80%;
+}
+
+.setTimeOut{
+  width: 425px;
+  margin-top: 10px;
 }

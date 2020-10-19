@@ -8,14 +8,14 @@
       </div>
       <div class="mainMenu" fxLayout="column" fxLayoutAlign="center center">
         <app-name (sendButton)="send($event)" [button]="buttonConnect" [isConnect]="isConnect"></app-name>
-        <div *ngIf="isAdmin" class="setTimeOut">
+        <div *ngIf="isAdmin" class="setTimeOut"  fxLayout="row" fxLayoutAlign="space-around center">
           <form [formGroup]="setTimeOutComboBox"  >
             <select class="time-box"  formControlName="setTimeOut">
               <option value="" disabled>Set Timeout (sec.)</option>
               <option *ngFor="let sec of timeOuts" [ngValue] = "sec.value">{{sec.name}}</option>
             </select>
-            <button class="send-cmb" (click)= "onSubmit()">Set timeout</button>
           </form>
+          <button class="send-cmb" (click)= "onSubmit()">Set timeout</button>
         </div>
       </div>
       <div *ngIf="isAdmin; else userBlock" class="mainTable">
@@ -55,14 +55,16 @@
     </div>
   </div>
   <ng-template #userBlock>
-      <div fxLayout="row" class="userBox">
+      <div fxLayout="row" class="userBox" fxLayoutAlign="space-between start">
         <div *ngIf="userMessagesList && userMessagesList.length>0 " class="msg-box">
-          <div >
-            <label>Messages</label>
+          <div fxLayout="column" fxLayoutAlign="space-between center">
+            <div>
+              <label>Messages</label>
+            </div>
+            <ul class="messages">
+              <li *ngFor="let mObj of userMessagesList">{{mObj.rand}}<br /></li>
+            </ul>
           </div>
-          <ul>
-            <li *ngFor="let mObj of userMessagesList">{{mObj.rand}}<br /></li>
-          </ul>
         </div>
         <div class="images" >
           <div class="userImageHeader">
