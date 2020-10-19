@@ -72,6 +72,10 @@ export class MainComponent {
   connections(user: MessageModel) {
     if (user.status==0)
     {
+      this.isAdmin = false;
+      this.blob=null;
+      this.userMessagesList=null;
+      this.activeUsersList = null;
       // this.signalRService.broadcastMessage(user);
       this.subscription.unsubscribe();
       this.signalRService.stopConnection(user);
@@ -120,6 +124,9 @@ export class MainComponent {
   };
 
   addToListUsersMessages(usermessage: UserMessageModel) {
+    if(!this.userMessagesList){
+      this.userMessagesList = [];
+    }
     let tempMess = new UserMessageModel();
     tempMess.rand=usermessage.rand;
     this.userMessagesList.push(tempMess);
@@ -131,9 +138,13 @@ export class MainComponent {
   };
 
   workWithListActiveUsers(adminmessage: ActiveUsersModel[]) {
+    if(!this.activeUsersList){
+      this.activeUsersList = [];
+    }
     this.activeUsersList.splice(0, this.activeUsersList.length);
     adminmessage.forEach((value) => {this.activeUsersList.push(value);});
     this.messages.data =this.activeUsersList;
+
     // this.activeUsersList.push(adminmessage);
   };
 
