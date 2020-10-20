@@ -33,12 +33,13 @@
 .activeUsers{
 
   max-height: 300px;
-
+  overflow: auto;
 }
 
 .activeUsersTable{
   border: 2px solid #191D32;
   border-radius: .5em;
+  max-height: 300px;
   overflow: auto;
 }
 
