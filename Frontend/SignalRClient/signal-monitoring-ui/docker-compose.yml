@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  frontsignalr:
+    image: ${DOCKER_REGISTRY-}frontsignalr
+    build: .
+    ports:
+      - "4200:4200"
+      - "49153:49153"
