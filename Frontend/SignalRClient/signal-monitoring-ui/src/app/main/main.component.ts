@@ -12,6 +12,7 @@ import { BlobModel } from '../models/blob-model';
 import { AdminMessagesLog } from '../models/admin-message-log-model';
 import { ActiveUsersModel } from '../models/active-users-model';
 import { MatTableDataSource } from '@angular/material/table';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-main',
@@ -50,6 +51,7 @@ export class MainComponent {
   async send(user: AdminMessageModel){
     // this.signalRService.mainConnection();
     this.signalRService.getUserRole(user).subscribe((data)=> {this.parseMesageModel(data, user.status);});
+    let t = environment.apiUrl;
   };
 
   parseMesageModel(checkRole: any, status: number)

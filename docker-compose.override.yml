@@ -11,3 +11,10 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  frontsignalr:
+    build: .
+    ports:
+      - "4200:4200"
+      - "49153:49153"
+    environment:
+      - API_BASE_URL=https://localhost:32782
