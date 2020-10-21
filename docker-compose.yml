@@ -5,11 +5,3 @@ services:
         build:
           context: .
           dockerfile: Backend/SignalR/Dockerfile
-
-version: "3.8"
-services:
-  signalrfromt:
-    build: .
-    ports:
-      - "4200:4200"
-      - "49153:49153"

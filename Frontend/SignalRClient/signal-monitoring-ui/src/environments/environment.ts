@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:32782'
+  apiUrl: window["env"]["apiUrl"] || "default",
+  debug: window["env"]["debug"] || false
+  // apiUrl: 'https://localhost:32782'
 };
 
 /*
