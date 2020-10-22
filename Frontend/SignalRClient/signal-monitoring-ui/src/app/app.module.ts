@@ -9,6 +9,7 @@ import { MainComponent } from './main/main.component';
 import { NameComponent } from './name/name.component';
 import { AngularMaterialModule } from './angular-materials';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { environment } from 'src/environments/environment';
 
 
 
@@ -29,7 +30,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     AngularMaterialModule,
     FlexLayoutModule
   ],
-  providers: [],
+  providers: [
+    {provide: 'BACKEND_API_URL', useValue: environment.backendApiUrl},
+    {provide: 'DEFAULT_LANGUAGE', useValue: environment.defaultLanguage}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

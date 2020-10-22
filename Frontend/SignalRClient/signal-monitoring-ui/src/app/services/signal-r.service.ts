@@ -1,16 +1,14 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr'
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { UserMessageModel } from '../models/user-message-model';
 import { AdminMessageModel } from '../models/admin-message-model';
 import { ConfigModel } from '../models/config-mogel';
-import { nextTick } from 'process';
 import { MessageModel } from '../models/message';
 import { BlobModel } from '../models/blob-model';
 import { ActiveUsersModel } from '../models/active-users-model';
 import { AdminMessagesLog } from '../models/admin-message-log-model';
-import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -41,12 +39,17 @@ export class SignalRService {
   workUrl: string;
   baseUrl: string;
 
-  constructor(private http: HttpClient) {
-    this.baseUrl = environment.apiUrl;
+  constructor(private http: HttpClient, @Inject('BACKEND_API_URL') private apiUrl: string) {
+    // this.baseUrl = environment.apiUrl;
+    this.baseUrl = this.apiUrl;
     this.POST_URL_SetTimeOut = this.baseUrl.concat("/api/main/setTimeOut");
     this.POST_URL_GetUserRole = this.baseUrl.concat("/api/main/getRoles");
 
-  }
+  };
+
+  getApiUrl(): string {
+    return this.apiUrl;
+  };
 
   public async startConnection(user: MessageModel, isAdmin: boolean) {
     this.setConfigurations();
@@ -87,7 +90,7 @@ export class SignalRService {
 
   async delay(ms: number) {
     await new Promise(resolve => setTimeout(()=>resolve(), ms)).then(()=>console.log("fired"));
-}
+  };
 
   mapUsersActivities(mess: any): void {
     this.activitiesUserObj.next(new AdminMessagesLog(mess.name, mess.status));
@@ -184,5 +187,5 @@ export class SignalRService {
 
   blobNextMessageReceived(): Observable<BlobModel> {
     return this.blobNextObject.asObservable();
-  }
+  };
 }

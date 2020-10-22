@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'RESOURCEA'
+  backendApiUrl: '${BACKEND_API_URL}',
+  defaultLanguage: '${DEFAULT_LANGUAGE}'
 };

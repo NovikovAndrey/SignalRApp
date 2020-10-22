@@ -51,7 +51,6 @@ export class MainComponent {
   async send(user: AdminMessageModel){
     // this.signalRService.mainConnection();
     this.signalRService.getUserRole(user).subscribe((data)=> {this.parseMesageModel(data, user.status);});
-    let t = environment.apiUrl;
   };
 
   parseMesageModel(checkRole: any, status: number)
@@ -149,18 +148,4 @@ export class MainComponent {
 
     // this.activeUsersList.push(adminmessage);
   };
-
-  // workWithListUsersNames(adminmessage: AdminMessageModel) {
-  //   if(adminmessage.status==1)
-  //   {
-  //     this.adminMessagesList.push(adminmessage);
-  //   }
-  //   else
-  //   {
-  //     let temp = this.adminMessagesList.findIndex(element=> element.name==adminmessage.name);
-  //     this.adminMessagesList.splice(temp, 1);
-  //   }
-  //   this.adminMessagesLog.push(new AdminMessagesLog(adminmessage.name, adminmessage.status));
-  //   // this.adminMessagesLog.reverse();
-  // };
 }

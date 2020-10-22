@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: window["env"]["apiUrl"] || "default",
-  debug: window["env"]["debug"] || false
+  backendApiUrl: 'https://localhost:32782',
+  defaultLanguage: 'en'
   // apiUrl: 'https://localhost:32782'
 };
 
