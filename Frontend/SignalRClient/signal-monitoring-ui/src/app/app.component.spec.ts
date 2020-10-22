@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
+  const defaultLanguageMock = 'en';
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -11,6 +12,9 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      providers:[
+        {provide: 'DEFAULT_LANGUAGE', useValue: defaultLanguageMock}
+      ]
     }).compileComponents();
   });
 

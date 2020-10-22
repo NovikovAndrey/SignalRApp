@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 
 
 @Component({
@@ -8,7 +8,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  constructor(){
+  title = 'angular-signalR';
+  language: string;
+
+  constructor(@Inject('DEFAULT_LANGUAGE') private defaultLanguage: string){
+    this.language = defaultLanguage;
   }
 
 }

@@ -41,6 +41,7 @@ export class MainComponent {
   isConnected = false;
   isNextBlob: boolean = false;
   blobNext: string;
+  title: string ="";
 
   constructor(private signalRService: SignalRService, public fb: FormBuilder){ }
 
@@ -49,6 +50,7 @@ export class MainComponent {
   })
 
   async send(user: AdminMessageModel){
+    this.title= this.signalRService.getApiUrl();
     // this.signalRService.mainConnection();
     this.signalRService.getUserRole(user).subscribe((data)=> {this.parseMesageModel(data, user.status);});
   };

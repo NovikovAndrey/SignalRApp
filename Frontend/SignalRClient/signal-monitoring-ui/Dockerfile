@@ -15,7 +15,8 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY ./dev/nginx.conf /etc/nginx/nginx.conf
 
 COPY --from=build  /usr/angular-workdir/dist/signal-monitoring-ui /usr/share/nginx/html
-
+EXPOSE 4200
+EXPOSE 49153
 RUN echo "for mainFileName in /usr/share/nginx/html/main*.js ;\
             do \
               envsubst '\$BACKEND_API_URL \$DEFAULT_LANGUAGE ' < \$mainFileName > main.tmp ;\

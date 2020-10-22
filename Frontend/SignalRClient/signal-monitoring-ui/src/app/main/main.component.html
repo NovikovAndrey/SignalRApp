@@ -3,6 +3,7 @@
       <div class="header" fxLayoutAlign="center center">
           <h2 class="mat-header-row" *ngIf="isAdmin; else userHeader">Check users</h2>
           <ng-template #userHeader>
+              <h1 class="mat-header-row">{{title}}</h1>
               <h2 class="mat-header-row">Get messages</h2>
           </ng-template>
       </div>

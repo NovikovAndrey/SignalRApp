@@ -28,7 +28,8 @@ import { environment } from 'src/environments/environment';
     HttpClientModule,
     ReactiveFormsModule,
     AngularMaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    AppRoutingModule
   ],
   providers: [
     {provide: 'BACKEND_API_URL', useValue: environment.backendApiUrl},
