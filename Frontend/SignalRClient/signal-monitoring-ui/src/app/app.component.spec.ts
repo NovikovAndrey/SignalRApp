@@ -12,7 +12,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
-      providers:[
+      providers: [
         {provide: 'DEFAULT_LANGUAGE', useValue: defaultLanguageMock}
       ]
     }).compileComponents();

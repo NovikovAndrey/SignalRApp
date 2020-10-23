@@ -41,9 +41,9 @@ export class SignalRService {
 
   constructor(private http: HttpClient, @Inject('BACKEND_API_URL') private apiUrl: string) {
     // this.baseUrl = environment.apiUrl;
-    //this.baseUrl = this.apiUrl;
-    //this.POST_URL_SetTimeOut = this.baseUrl.concat("/api/main/setTimeOut");
-    //this.POST_URL_GetUserRole = this.baseUrl.concat("/api/main/getRoles");
+    this.baseUrl = this.apiUrl;
+    this.POST_URL_SetTimeOut = this.baseUrl.concat("/api/main/setTimeOut");
+    this.POST_URL_GetUserRole = this.baseUrl.concat("/api/main/getRoles");
 
   };
 
