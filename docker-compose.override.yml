@@ -14,7 +14,7 @@ services:
   frontsignalr:
     build: .
     ports:
-      - "4200:4200"
+      - "4200:80"
       - "49153:49153"
     environment:
       - BACKEND_API_URL=https://localhost:32782

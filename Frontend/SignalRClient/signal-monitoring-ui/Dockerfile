@@ -3,8 +3,9 @@ FROM gmathieu/node-browsers:3.0.0 AS build
 COPY Frontend/SignalRClient/signal-monitoring-ui/package.json /usr/angular-workdir/
 WORKDIR /usr/angular-workdir
 RUN npm install
+RUN npm install -g @angular/cli
 
-COPY ./ /usr/angular-workdir
+COPY Frontend/SignalRClient/signal-monitoring-ui/ /usr/angular-workdir
 RUN npm run build
 
 FROM nginx:1.15.8-alpine
@@ -12,7 +13,7 @@ FROM nginx:1.15.8-alpine
 ## Remove default nginx website
 RUN rm -rf /usr/share/nginx/html/*
 
-COPY .Frontend/SignalRClient/signal-monitoring-ui/dev/nginx.conf /etc/nginx/nginx.conf
+COPY Frontend/SignalRClient/signal-monitoring-ui/dev/nginx.conf /etc/nginx/nginx.conf
 
 COPY --from=build  /usr/angular-workdir/dist/signal-monitoring-ui /usr/share/nginx/html
 EXPOSE 4200
