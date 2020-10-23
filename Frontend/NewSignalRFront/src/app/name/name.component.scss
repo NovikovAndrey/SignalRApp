@@ -1,0 +1,33 @@
+.name-box {
+  height: auto;
+  width: 180px;
+  border-radius: .5em;
+  border: 0px solid rgba(0, 0, 0, 0);
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid #b423d1;
+}
+
+.name-box:focus {
+  outline: none;
+}
+
+.mainButton{
+  width: 425px;
+}
+
+.send-btn {
+  height: auto;
+  width: auto;
+  border-radius: .3em;
+  background-color: #DD1155;
+  border: 0px solid rgba(0, 0, 0, 0);
+  font-size: 25px;
+  color: #FDFFFF;
+}
+
+.send-btn:focus {
+  outline: none;
+  border-color: #DD1155;
+  box-shadow: 0 0 5px #DD1155;
+}
