@@ -4,9 +4,8 @@
 
 export const environment = {
   production: false,
-  backendApiUrl: 'https://localhost:44353',
+  backendApiUrl: 'localhost:8080/api/',
   defaultLanguage: 'en'
-  // apiUrl: 'https://localhost:32782'
 };
 
 /*

@@ -1,0 +1,121 @@
+.time-box {
+  height: auto;
+  width: 180px;
+  border-radius: .5em;
+  border: 0px solid rgba(0, 0, 0, 0);
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid #b423d1;
+}
+
+.time-box:focus {
+  outline: none;
+}
+
+.send-cmb {
+  height: auto;
+  width: auto;
+  border-radius: .3em;
+  background-color: #DD1155;
+  margin-left: 20px;
+  border: 0px solid rgba(0, 0, 0, 0);
+  font-size: 25px;
+  color: #FDFFFF;
+  position: relative;
+}
+
+.send-cmb:focus {
+  outline: none;
+  border-color: #DD1155;
+  box-shadow: 0 0 5px #DD1155;
+}
+
+.activeUsers{
+
+  max-height: 300px;
+  overflow: auto;
+}
+
+.activeUsersTable{
+  border: 2px solid #191D32;
+  border-radius: .5em;
+  max-height: 300px;
+  overflow: auto;
+}
+
+.log{
+    // background-color: blue;
+    min-width: 425px;
+    max-height: 200px;
+    border: 2px solid #191D32;
+    border-radius: .5em;
+    margin-top: 2px;
+}
+
+.logBox{
+  overflow: auto;
+  max-height: 150px;
+  width: 100%;
+}
+
+.container{
+  // margin: 100px;
+  height:100%;
+  // max-width: 50%;
+  //  border:2px solid red;
+  overflow: auto;
+}
+
+.images{
+  display: block;
+  margin-left: 10px;
+}
+
+.msg-box{
+  margin: 10px;
+  border: 2px solid #191D32;
+  border-radius: .5em;
+  max-height: 400px;
+  min-width: 250px;
+  overflow: auto;
+}
+
+.currentPicLabel{
+  margin-right: 25px;
+}
+
+.nextPicLabel{
+  margin-left: 25px;
+}
+
+.currentPic{
+  margin-right: 5px;
+}
+
+.nextPic{
+  margin-left: 5px;
+}
+
+.mainTable{
+  margin: 10px;
+}
+
+.mat-cell{
+  border-bottom: none;
+}
+.userBox{
+  width: 425px;
+}
+
+.userImageHeader{
+  margin-left: 20px;
+}
+
+.messages{
+  width: 80%;
+}
+
+.setTimeOut{
+  width: 425px;
+  margin-top: 10px;
+}
