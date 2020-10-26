@@ -116,16 +116,15 @@ namespace SignalR.Controllers
 
         [HttpGet]
         [Route("getUsersActivities")]
-        public JsonResult GetUsersActivities()
+        public IActionResult GetUsersActivities()
         {
-            return new JsonResult(6);
+            return BadRequest();
         }
 
         [HttpPost]
         [Route("setTimeOut")]
         public void SetTimeOutFromAdmin([FromBody] TimeOutModel timeOutUserMesssage)
         {
-            //timeOut = sec;
             if (isWorking)
             {
                 _timer.Stop();
