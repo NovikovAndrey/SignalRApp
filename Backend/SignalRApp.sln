@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalR", "SignalR\SignalR.
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{75226559-428F-444F-9FF6-1556DB4FFE4F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SirnalRApp.Tests", "..\UITests\SirnalRApp.Tests\SirnalRApp.Tests.csproj", "{B3CC5E57-8C02-438A-904D-AC0FF7AB7A26}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{75226559-428F-444F-9FF6-1556DB4FFE4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75226559-428F-444F-9FF6-1556DB4FFE4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75226559-428F-444F-9FF6-1556DB4FFE4F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B3CC5E57-8C02-438A-904D-AC0FF7AB7A26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B3CC5E57-8C02-438A-904D-AC0FF7AB7A26}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B3CC5E57-8C02-438A-904D-AC0FF7AB7A26}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B3CC5E57-8C02-438A-904D-AC0FF7AB7A26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
