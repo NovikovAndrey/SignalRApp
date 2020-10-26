@@ -86,14 +86,12 @@ namespace SignalR.Controllers
 
         public static void UserConnect(string connectionId, string name, string role, int status)
         {
-            //_userActivities.Add(new UserActivitiesModel(connectionId, name, role, status));
             _activeUsers.Add(new UserActivitiesModel(connectionId, name, role, status));
         }
 
         public static void UserDisconnect(string connectionId, string name, string role, int status)
         {
             var tempModel = new UserActivitiesModel(connectionId, name, role, status);
-            //_userActivities.Add(tempModel);
             foreach(var user in _activeUsers)
             {
                 if(user.ConnectionId == tempModel.ConnectionId)
@@ -106,8 +104,6 @@ namespace SignalR.Controllers
 
         internal static void UserDisconnect(string connectionId)
         {
-            //var tempModel = new UserActivitiesModel(connectionId, name, role, status);
-            //_userActivities.Add(tempModel);
             foreach (var user in _activeUsers)
             {
                 if (user.ConnectionId == connectionId)
@@ -117,13 +113,6 @@ namespace SignalR.Controllers
                 }
             }
         }
-
-        //[HttpGet]
-        //[Route("getActiveUsers")]
-        //public JsonResult GetActiveUsers()
-        //{
-        //    return new JsonResult(6);
-        //}
 
         [HttpGet]
         [Route("getUsersActivities")]
